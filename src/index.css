@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components{
+  body{
+    @apply bg-rose-200 bg-opacity-20
+  }
+}
