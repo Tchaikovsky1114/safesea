@@ -8,9 +8,9 @@ const useTime = () => {
   let month:string | number = date.getMonth() + 1;
   let day: string | number = date.getDate();
   let hours: string | number = date.getHours();
-  
+  let minutes: string | number = date.getMinutes();
   const forecastNoticeTime = ["02","05","08","11","14","17","20","23"];
-  let nowNoticeTime = 0;
+  let nowNoticeTime: number | string = 0;
   let today = '';
   
   for(let i = 0; i < forecastNoticeTime.length; i++){
@@ -32,9 +32,16 @@ const useTime = () => {
     day = '0'+ day;
   }
   today = year+ "" + month + '' + day;
+  
+  if(nowNoticeTime < 10){
+    nowNoticeTime ='0' + nowNoticeTime
+  }
+  
   return {
     today,
-    nowNoticeTime
+    nowNoticeTime,
+    hours,
+    minutes
   }
 };
 

@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import './KaKaoMap.css';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import useConvertLatLng, { RsTypes } from '../hooks/useConvertLatLng';
 import useTime from '../hooks/useTime';
 import Weather from './Weather';
@@ -31,6 +31,15 @@ export interface ResponseDataTypes {
   fcstValue: string;
 }
 
+export interface WeatherDetailsTypes{  
+  pop: ResponseDataTypes[]
+  reh: ResponseDataTypes[]
+  pcp: ResponseDataTypes[]
+  tmp: ResponseDataTypes[]
+  sky: ResponseDataTypes[]
+  pty: ResponseDataTypes[]
+}
+
 const { kakao } = window;
 
 const KakaoMap = () => {
@@ -41,6 +50,15 @@ const KakaoMap = () => {
   const [weatherResult, setWeatherResult] = useState<ResponseDataTypes[]>([]);
   const [geoResult, setGeoResult] = useState<GeoTypes>({ x: 0, y: 0 });
   const [minMaxTemp, setMinMaxTemp] = useState<ResponseDataTypes[]>([]);
+  const [test, setTest] = useState<WeatherDetailsTypes>(
+    {
+    pop:[],
+    reh:[],
+    pcp:[],
+    tmp:[],
+    sky:[],
+    pty:[]
+  });
   const calcLatLng = useConvertLatLng();
   const { today, nowNoticeTime } = useTime();
 
@@ -71,33 +89,60 @@ const KakaoMap = () => {
         new Promise((resolve, reject) => {
           resolve(calcLatLng(Number(result[0].x), Number(result[0].y)));
         }).then((resolve: any) => {
-          axios
-            .get(
-              `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=1000&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`
-            )
+          axios.get(`https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=1000&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`)
             .then((response) => {
               const result: ResponseDataTypes[] =
                 response.data.response.body.items.item;
 
-              let detailWeatherArray: ResponseDataTypes[] = [];
+              let detailWeatherArray: WeatherDetailsTypes[] = [];
               let maxMinWeatherArray: ResponseDataTypes[] = [];
+              let popArray:ResponseDataTypes[] = []
+              let rehArray:ResponseDataTypes[] = []
+              let pcpArray:ResponseDataTypes[] = []
+              let skyArray:ResponseDataTypes[] = []
+              let ptyArray:ResponseDataTypes[] = []
+              
+              let tmpArray:ResponseDataTypes[] = []
               result.map((item) => {
-                if (
-                  item.category === 'POP' ||
-                  item.category === 'REH' ||
-                  item.category === 'PCP' ||
-                  item.category === 'POP' ||
-                  item.category === 'SKY' ||
-                  item.category === 'PTY'
-                ) {
-                  detailWeatherArray.push(item);
+                if (item.category === 'POP'){
+                  popArray.push(item)
+                }
+                
+                if(item.category === 'PCP'){
+                  
+                  pcpArray.push(item)
+                }
+                if(item.category === 'SKY'){
+                  
+                  skyArray.push(item)
+                }
+                if(item.category === 'PTY'){
+                  
+                  ptyArray.push(item)
+                }
+                if(item.category === 'REH'){
+                  
+                  rehArray.push(item)
+                }
+                if(item.category === 'TMP'){
+                  
+                  tmpArray.push(item);
                 }
                 if (item.category === 'TMN' || item.category === 'TMX') {
                   setMinMaxTemp((prev) => [...prev, item]);
                 }
               });
-              console.log(detailWeatherArray);
-              console.log(minMaxTemp);
+              setTest({
+                pop:popArray,
+                reh:rehArray,
+                pcp:pcpArray,
+                tmp:tmpArray,
+                sky:skyArray,
+                pty:ptyArray
+              })
+              
+              
+            
 
               for (let i = 0; i < placeMarkers.length; i++) {
                 placeMarkers[i].setMap(null);
@@ -122,6 +167,7 @@ const KakaoMap = () => {
       }
     });
   };
+  console.log(test);
 
   const displayMarker = (place: any) => {
     let marker = new window.kakao.maps.Marker({
@@ -170,7 +216,7 @@ const KakaoMap = () => {
     };
   }, []);
 
-  console.log(minMaxTemp);
+  
   return (
     <>
       <div className="relative">
@@ -242,7 +288,7 @@ const KakaoMap = () => {
           }}
         />
         <div>
-          <Weather minMaxTemp={minMaxTemp} geoSearchValue={geoSearchValue} />
+          {geoSearchValue && <Weather minMaxTemp={minMaxTemp} geoSearchValue={geoSearchValue} test={test} />}
         </div>
       </div>
     </>

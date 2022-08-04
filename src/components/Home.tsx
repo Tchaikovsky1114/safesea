@@ -8,10 +8,6 @@ const Home = () => {
     <div>
       <nav className=" flex justify-between items-center h-14">
         <div className="p-10">logo</div>
-        <div className="flex-1 flex justify-center items-center">
-          <label>search</label>
-          <input className="border border-black" type="text" />
-        </div>
         <div className="w-32">
           <Link to="/auth">
           signup/in
