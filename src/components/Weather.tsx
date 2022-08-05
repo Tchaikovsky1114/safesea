@@ -36,8 +36,17 @@ const Weather = ({minMaxTemp,geoSearchValue,test}:WeatherProps) => {
     </div>
     <div>
 
+
     <div className="h-full scrollbar scrollbar-thumb-rose-900 scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full hover:scrollbar-thumb-blue-500 transition-colors duration-150">
       <p className="text-rose-400 text-xs font-bold text-left pb-2"> * 빨간색이 현재 시간의 날씨를 나타내고 있어요!</p>
+
+
+      <div className='flex flex-row justify-start'>  
+    <h3 className='w-full font-bold text-[18px] py-2 min-w-[100px]   flex justify-center items-center border bg-rose-400'><p>현재 기온</p></h3>
+    {test.tmp.map((item) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category}  forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
+    </div>
+
+    
       <div className='flex flex-row justify-start'>    
       <h3 className='w-full font-bold text-base min-w-[100px]  flex justify-center items-center border bg-indigo-400 '><p>비소식</p></h3>
     {test.pcp.map((item) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
@@ -64,10 +73,7 @@ const Weather = ({minMaxTemp,geoSearchValue,test}:WeatherProps) => {
     
     
 
-    <div className='flex flex-row justify-start'>  
-    <h3 className='w-full font-bold text-[18px] py-2 min-w-[100px]   flex justify-center items-center border bg-rose-400'><p>현재 기온</p></h3>
-    {test.tmp.map((item) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category}  forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
-    </div>
+ 
     </div>
         <div className="p-2"></div>
     
