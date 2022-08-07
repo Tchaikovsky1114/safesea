@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 
 export interface RsTypes {
@@ -9,7 +9,7 @@ export interface RsTypes {
 
 const useConvertLatLng = () => {
 
-  const calcLatLng = (geoX:number,geoY:number) => {
+  const calcLatLng = useCallback((geoX:number,geoY:number) => {
     const RE = 6371.00877; // 지구 반경(km)
     const GRID = 5.0; // 격자 간격(km)
     const SLAT1 = 30.0; // 투영 위도1(degree)
@@ -57,7 +57,7 @@ const useConvertLatLng = () => {
     console.log(rs.x, rs.y);
     return rs
     
-  }
+  },[])
   return calcLatLng
 };
 

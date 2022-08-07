@@ -11,6 +11,7 @@ import axios, { AxiosResponse } from 'axios';
 import useConvertLatLng, { RsTypes } from '../hooks/useConvertLatLng';
 import useTime from '../hooks/useTime';
 import Weather from './Weather';
+import WeatherDetails from './WeatherDetails';
 
 declare global {
   interface Window {
@@ -37,9 +38,14 @@ export interface WeatherDetailsTypes {
   pcp: ResponseDataTypes[];
   tmp: ResponseDataTypes[];
   sky: ResponseDataTypes[];
-  pty: ResponseDataTypes[];
 }
 
+interface MiniWeatherDetailsTypes {
+  pop: ResponseDataTypes[];
+  pcp: ResponseDataTypes[];
+  tmp: ResponseDataTypes[];
+  
+}
 const { kakao } = window;
 
 const KakaoMap = () => {
@@ -51,16 +57,24 @@ const KakaoMap = () => {
   const [geoResult, setGeoResult] = useState<GeoTypes>({ x: 0, y: 0 });
   const [minMaxTemp, setMinMaxTemp] = useState<ResponseDataTypes[]>([]);
   const [places, setPlaces] = useState<any>([]);
-  const [test, setTest] = useState<WeatherDetailsTypes>({
+
+  const [weatherInMiniPopup, setWeatherInMiniPopup] = useState<MiniWeatherDetailsTypes>({
+      pop: [],
+      
+      pcp: [],
+      tmp: [],
+      
+    });
+  const [weather, setWeather] = useState<WeatherDetailsTypes>({
     pop: [],
     reh: [],
     pcp: [],
     tmp: [],
     sky: [],
-    pty: [],
   });
+
   const calcLatLng = useConvertLatLng();
-  const { today, nowNoticeTime } = useTime();
+  const { today, nowNoticeTime, afterFiveHours,hours } = useTime();
 
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
@@ -81,8 +95,15 @@ const KakaoMap = () => {
     setPlaceMarkers([]);
     setWeatherResult([]);
     setMinMaxTemp([]);
-
+    setWeather({
+      pop: [],
+      reh: [],
+      pcp: [],
+      tmp: [],
+      sky: [],
+    })
     geo.current.addressSearch(searchValue, (result: any, status: any) => {
+      
       if (status === window.kakao.maps.services.Status.OK) {
         setGeoResult({
           x: Number(result[0].x),
@@ -90,52 +111,53 @@ const KakaoMap = () => {
         });
         new Promise((resolve, reject) => {
           resolve(calcLatLng(Number(result[0].x), Number(result[0].y)));
+          console.log(calcLatLng(Number(result[0].x), Number(result[0].y)))
         }).then((resolve: any) => {
           axios
             .get(
               `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=1000&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`
+              
             )
             .then((response) => {
+              console.log(response)
               const result: ResponseDataTypes[] =
                 response.data.response.body.items.item;
 
-              let popArray: ResponseDataTypes[] = [];
-              let rehArray: ResponseDataTypes[] = [];
-              let pcpArray: ResponseDataTypes[] = [];
-              let skyArray: ResponseDataTypes[] = [];
-              let ptyArray: ResponseDataTypes[] = [];
-              let tmpArray: ResponseDataTypes[] = [];
               result.map((item) => {
                 if (item.category === 'POP') {
-                  popArray.push(item);
+                  setWeather((prev) => ({
+                    ...prev,
+                    pop: [...prev.pop, item],
+                  }));
                 }
 
                 if (item.category === 'PCP') {
-                  pcpArray.push(item);
+                  setWeather((prev) => ({
+                    ...prev,
+                    pcp: [...prev.pcp, item],
+                  }));
                 }
                 if (item.category === 'SKY') {
-                  skyArray.push(item);
-                }
-                if (item.category === 'PTY') {
-                  ptyArray.push(item);
+                  setWeather((prev) => ({
+                    ...prev,
+                    sky: [...prev.sky, item],
+                  }));
                 }
                 if (item.category === 'REH') {
-                  rehArray.push(item);
+                  setWeather((prev) => ({
+                    ...prev,
+                    reh: [...prev.reh, item],
+                  }));
                 }
                 if (item.category === 'TMP') {
-                  tmpArray.push(item);
+                  setWeather((prev) => ({
+                    ...prev,
+                    tmp: [...prev.tmp, item],
+                  }));
                 }
                 if (item.category === 'TMN' || item.category === 'TMX') {
                   setMinMaxTemp((prev) => [...prev, item]);
                 }
-              });
-              setTest({
-                pop: popArray,
-                reh: rehArray,
-                pcp: pcpArray,
-                tmp: tmpArray,
-                sky: skyArray,
-                pty: ptyArray,
               });
               for (let i = 0; i < placeMarkers.length; i++) {
                 placeMarkers[i].setMap(null);
@@ -162,51 +184,150 @@ const KakaoMap = () => {
     });
   };
 
-  console.log(places);
-
   const displayMarker = (place: any) => {
+    if(!weatherInMiniPopup.pcp) return;
+    setPlaceMarkers((prev) => [...prev, marker]);
+
     let imageSrc =
-      'https://velog.velcdn.com/images/tchaikovsky/post/ada07148-1190-4dd6-bd2c-e7a22e2237f8/image.png';
-    let imageSize = new window.kakao.maps.Size(45, 50);
-    let imageOption = { offset: new window.kakao.maps.Point(15, 45) };
+    'https://velog.velcdn.com/images/tchaikovsky/post/ada07148-1190-4dd6-bd2c-e7a22e2237f8/image.png';
+  let imageSize = new window.kakao.maps.Size(45, 50);
+  let imageOption = { offset: new window.kakao.maps.Point(15, 45) };
 
-    let markerImage = new window.kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imageOption
-    );
-
+  let markerImage = new window.kakao.maps.MarkerImage(
+    imageSrc,
+    imageSize,
+    imageOption
+  );
     let marker = new window.kakao.maps.Marker({
       map: map.current,
       position: new window.kakao.maps.LatLng(place.y, place.x),
       clickable: true,
       image: markerImage,
     });
-
-    //
-    let iwContent =/*html */ `
-    
-    <div class=" w-60 h-48 flex flex-col items-center justify-center gap-4 p-10">
-      <p class="text-center font-bold px-4 flex-[3] w-full">${place.place_name}</p>
-    <p class="text-xs font-semibold text-slate-500 flex-[2]">${place.address_name}</p>
-    <p class="text-xs text-gray-400" class="flex-1">${place.place_phone || "전화번호가 등록되지 않은 상호입니다"}</p>
-    <a href=${place.place_url} target="_blank" class="flex-[2] text-blue-400 hover:text-rose-400">카카오 맵으로 이동</a>
-  </div>
-    `;
-    let iwRemoveable = true;
-    let infowindow = new window.kakao.maps.InfoWindow({
-      content: iwContent,
-      removable: iwRemoveable,
-    });
-
-    window.kakao.maps.event.addListener(marker, 'click', () => {
-      infowindow.open(map.current, marker);
-    });
-    //
-
-    setPlaceMarkers((prev) => [...prev, marker]);
+    window.kakao.maps.event.addListener(marker, 'click',() => markerClickHandler(place, marker));
   };
 
+
+
+
+
+  const markerClickHandler = (place: any,marker: any) => {
+    setWeatherInMiniPopup({
+      pop: [],
+      pcp: [],
+      tmp: [],
+    });
+    new Promise((resolve, reject) => {
+      resolve(calcLatLng(Number(place.x), Number(place.y)));
+    })
+      .then((resolve: any) =>
+        axios.get(
+          `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=500&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`
+        )
+      )
+      .catch((err) => console.log(err))
+      .then((resolve: any) => {
+        const weatherInThisPlace: ResponseDataTypes[] =
+          resolve.data.response.body.items.item;
+
+          // 지금부터 5시간...
+          console.log(Number(afterFiveHours + '00'))
+          console.log(today)
+          const filteredWeather:any = []
+          weatherInThisPlace.map((item) => {
+            // ["02","05","08","11","14","17","20","23"];
+            if(Number(item.baseTime) < 2001){
+            if(item.fcstDate === today && Number(item.fcstTime) <= Number(afterFiveHours + '00')){
+                filteredWeather.push(item)
+            }
+          }
+          // || Number(item.fcstDate) === Number(today) + 1 && Number(item.fcstTime) - 2400 < Number(afterFiveHours + '00')
+            if(Number(item.baseTime) === 2000 ){
+              if(Number(item.fcstDate) === Number(today) && Number(item.fcstTime) <= Number(afterFiveHours + '00')){
+                filteredWeather.push(item)
+              }
+            }
+            if(Number(item.baseTime) === 2300){
+              if(Number(item.fcstDate) === Number(today) + 1 && Number(item.fcstTime) <= Number(afterFiveHours + '00')){
+                filteredWeather.push(item)
+              }
+            }
+          });      
+          
+          const tmp:any = []
+
+          const pcp:any = []
+        filteredWeather.map((item:ResponseDataTypes) => {
+
+          if (item.category === 'PCP') {
+            // setWeatherInMiniPopup((prev) => ({
+            //   ...prev,
+            //   pcp: [...prev.pcp, item],
+            // }));
+            pcp.push(item)
+          }
+          if (item.category === 'TMP') {
+            // setWeatherInMiniPopup((prev) => ({
+            //   ...prev,
+            //   tmp: [...prev.tmp, item],
+            // }));
+            tmp.push(item)
+          }
+        });
+        console.log(tmp)
+        console.log(pcp)
+        // console.log(weatherInMiniPopup);
+        let iwRemoveable = true;
+        let iwContent = /*jsx */ `
+        <div class=" w-80 h-96 flex flex-col items-center justify-start gap-4 p-6">
+          <p class="text-center font-bold px-4 flex-[3] w-72">${place.place_name}</p>
+        <p class="text-xs font-semibold text-slate-500 flex-[2]">${place.address_name}</p>
+        <p class="text-xs text-gray-400" class="flex-1">${place.place_phone || '전화번호가 등록되지 않은 상호입니다'}</p>
+        <a href=${place.place_url} target="_blank" class="flex-[2] text-blue-400 hover:text-rose-400">카카오 맵으로 이동</a>
+        <div class="flex flex-col items-center justify-center">
+          <h3 class="truncate text-xs py-4">오늘의 <span class="font-bold">${
+            place.place_name
+          }</span> 날씨</h3>
+        <div class="flex flex-row justify-start items-center">
+          <div class="flex justify-center items-center w-10 h-8"><img src="https://e7.pngegg.com/pngimages/473/569/png-clipart-graphy-clock-clock-icon-angle-number-thumbnail.png" alt="thermometer" class="w-4 mx-auto" /></div>
+        ${tmp
+          .map((item:ResponseDataTypes) => {
+            return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstTime.substr(0,2)}</span>시</div>`;
+          })
+          .join('')}
+        </div>
+        <div class="flex flex-row justify-start items-center">
+          <div class="flex justify-center items-center w-10 h-8"><img src="https://upload.wikimedia.org/wikipedia/en/d/d5/Thermometer_icon.png" alt="thermometer" class="w-4 mx-auto" /></div>
+        ${tmp
+          .map((item:ResponseDataTypes) => {
+            return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstValue}</span>도</div>`;
+          })
+          .join('')}
+        </div>
+        <div class="flex flex-row justify-start items-center">
+          <div class="flex justify-center items-center w-10 h-8"><img src="https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather07-512.png" alt="thermometer" class="w-4 mx-auto" /></div>
+        ${pcp
+          .map((item:ResponseDataTypes) => {
+            return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${
+              item.fcstValue === '강수없음' ? '맑음' : item.fcstValue
+            }</span></div>`;
+          })
+          .join('')}
+        </div>
+        </div>
+      </div>
+        `;
+            let infowindow = new window.kakao.maps.InfoWindow({
+              content: iwContent,
+              removable: iwRemoveable,
+            });
+            // window.kakao.maps.event.removeListener(marker, 'click', markerClickHandler);
+           
+            
+        infowindow.open(map.current, marker);
+      });
+      
+  };
   useEffect(() => {
     const script = document.createElement('script');
     script.src =
@@ -341,7 +462,7 @@ const KakaoMap = () => {
             <Weather
               minMaxTemp={minMaxTemp}
               geoSearchValue={geoSearchValue}
-              test={test}
+              weather={weather}
             />
           )}
         </div>

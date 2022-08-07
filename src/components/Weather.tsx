@@ -6,19 +6,19 @@ import WeatherDetails from './WeatherDetails';
 interface WeatherProps {
   minMaxTemp:ResponseDataTypes[]
   geoSearchValue:string
-  test: WeatherDetailsTypes
+  weather: WeatherDetailsTypes
 }
-const Weather = ({minMaxTemp,geoSearchValue,test}:WeatherProps) => {
+const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
   const {hours} = useTime();
-  console.log(hours)
+  
   return (
     <div className='mt-24'>
     <h2 className='font-bold text-lg text-center'>오늘의 {geoSearchValue} 날씨는?</h2>  
     <div className="relative grid grid-cols-2 pt-20 gap-12">
     
-    <div className='mx-auto rounded-full flex flex-row justify-start justify-center items-center gap-4 bg-yellow-400 opacity-80 w-[480px] h-[480px] relative'>
+    <div className='mx-auto rounded-full flex flex-row justify-start items-center gap-4 bg-yellow-400 opacity-80 w-[480px] h-[480px] relative'>
       {minMaxTemp.map((item,i) => (
-      <div key={item.baseDate + item.fcstTime + item.category + i} className=" min-w-[80px]">
+      <div key={item.baseDate + item.fcstTime + item.category + i + "weather"} className=" min-w-[80px]">
         <p>{item.fcstDate.substr(4,1) === "0" ? item.fcstDate.substr(5,1) : item.fcstDate.substr(4,2)}월 {item.fcstDate.substr(7)}일</p>
         {item.category === "TMN" &&
         <div className='text-blue-400 font-bold text-sm'>
@@ -43,32 +43,32 @@ const Weather = ({minMaxTemp,geoSearchValue,test}:WeatherProps) => {
 
       <div className='flex flex-row justify-start'>  
     <h3 className='w-full font-bold text-[18px] py-2 min-w-[100px]   flex justify-center items-center border bg-rose-400'><p>현재 기온</p></h3>
-    {test.tmp.map((item) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category}  forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
+    {weather.tmp.map((item,index) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category + index} forecastDate={item.fcstDate} forecastCategory={item.category}  forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
     </div>
 
     
       <div className='flex flex-row justify-start'>    
       <h3 className='w-full font-bold text-base min-w-[100px]  flex justify-center items-center border bg-indigo-400 '><p>비소식</p></h3>
-    {test.pcp.map((item) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
+    {weather.pcp.map((item,index) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category+ index} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
     </div>
     
     
 
     <div className='flex flex-row justify-start'>
     <h3 className='w-full font-bold text-base min-w-[100px]   flex justify-center items-center border bg-slate-400'><p>비 내릴 확률</p></h3>
-    {test.pop.map((item) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category}  forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
+    {weather.pop.map((item,index) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category + index}  forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
     </div>
 
     <div className='flex flex-row justify-start'>
     <h3 className='w-full font-bold text-base min-w-[100px]   flex justify-center items-center border bg-blue-400'><p>습도</p></h3>
-    {test.reh.map((item) => <WeatherDetails  key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
+    {weather.reh.map((item,index) => <WeatherDetails  key={item.fcstTime + item.fcstDate + item.category + index} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
     </div>
 
     
 
     <div className='flex flex-row justify-start'>  
     <h3 className='w-full font-bold text-base min-w-[100px]  flex justify-center items-center border bg-indigo-400 '><p>하늘 상태</p></h3>
-    {test.sky.map((item) => <WeatherDetails  key={item.fcstTime + item.fcstDate + item.category} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
+    {weather.sky.map((item,index) => <WeatherDetails  key={item.fcstTime + item.fcstDate + item.category + index} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
     </div>
     
     
