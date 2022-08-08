@@ -14,20 +14,19 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
   return (
     <div className='mt-24'>
     <h2 className='font-bold text-lg text-center'>오늘의 {geoSearchValue} 날씨는?</h2>  
-    <div className="relative grid grid-cols-2 pt-20 gap-12">
-    
-    <div className='mx-auto rounded-full flex flex-row justify-start items-center gap-4 bg-yellow-400 opacity-80 w-[480px] h-[480px] relative'>
+    <div className="relative">
+    <div className='mx-auto flex flex-wrap sm:flex-nowrap flex-row justify-center items-center gap-2 border border-gray-300 shadow-xl rounded-full sm:rounded-3xl px-4 py-8 my-8 bg-slate-300 relative '>
       {minMaxTemp.map((item,i) => (
-      <div key={item.baseDate + item.fcstTime + item.category + i + "weather"} className=" min-w-[80px]">
-        <p>{item.fcstDate.substr(4,1) === "0" ? item.fcstDate.substr(5,1) : item.fcstDate.substr(4,2)}월 {item.fcstDate.substr(7)}일</p>
+      <div key={item.baseDate + item.fcstTime + item.category + i + "weather"} className=" border rounded-full bg-white max-w-fit min-w-[80px] p-4 sm:min-w-[100px] sm:min-h-[100px] mx-auto ">
+        <p className='w-full text-[10px] sm:text-xs font-bold pt-2 rounded-full break-normal '>{item.fcstDate.substr(4,1) === "0" ? item.fcstDate.substr(5,1) : item.fcstDate.substr(4,2)}월 {item.fcstDate.substr(6,1) === "0" ? item.fcstDate.substr(7,1) : item.fcstDate.substr(6,2)}일</p>
         {item.category === "TMN" &&
-        <div className='text-blue-400 font-bold text-sm'>
-          최저 기온
-          <p className='text-blue-500'>{item.fcstValue}℃</p>  
+        <div className='text-blue-400 font-bold text-xs'>
+          <span className='hidden sm:block '>최저 기온</span>
+          <p className='text-blue-500 text-xs sm:text-2xl'>{item.fcstValue}<span className='text-sm'>℃</span></p>  
           </div>}
-        {item.category === "TMX" && <div className='text-red-400 font-bold text-sm'>
-          최고 기온
-          <p className='text-red-500'>{item.fcstValue}℃</p>  
+        {item.category === "TMX" && <div className='text-red-400 font-bold text-xs'>
+          <span className='hidden sm:block'>최고 기온</span>
+          <p className='text-red-500 text-xs sm:text-2xl'>{item.fcstValue}<span className='text-sm'>℃</span></p>  
           </div>}
         
     </div>
@@ -76,7 +75,6 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
  
     </div>
         <div className="p-2"></div>
-    
     </div>
     </div>
     </div>

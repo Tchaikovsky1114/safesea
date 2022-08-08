@@ -5,6 +5,6 @@
 
 @layer components{
   body{
-    @apply bg-rose-200 bg-opacity-20
+    @apply bg-gray-200 bg-opacity-20
   }
 }

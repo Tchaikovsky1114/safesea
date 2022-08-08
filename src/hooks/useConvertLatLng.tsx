@@ -54,7 +54,7 @@ const useConvertLatLng = () => {
     rs['x'] = Math.floor(ra * Math.sin(theta) + XO + 0.5);
     rs['y'] = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
   
-    console.log(rs.x, rs.y);
+    
     return rs
     
   },[])

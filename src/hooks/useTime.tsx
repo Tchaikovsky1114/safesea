@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const useTime:any = () => {
+  let date = new Date();
+  const [month,setMonth] = useState<string|number>(date.getMonth() + 1);
+  const [hours,setHours] = useState<string|number>(date.getHours());
+  const [year,setYear] = useState<string|number>(date.getFullYear());
   
-  
-  const date = new Date();
-  const year = date.getFullYear();
-  let month:string | number = date.getMonth() + 1;
+  // let month:string | number = date.getMonth() + 1;
   let day: string | number = date.getDate();
-  let hours: string | number = date.getHours();
+  // let hours: string | number = date.getHours();
   let afterFiveHours: string | number = date.getHours() + 5 > 24 ? date.getHours() - 19 : date.getHours() + 5
   afterFiveHours = afterFiveHours < 10 ? "0" + afterFiveHours : afterFiveHours
 
@@ -17,22 +18,24 @@ const useTime:any = () => {
   let today: number | string = year + "" + month + '' + day;
   
   
-//  성능이슈 . 리팩토링 반드시 진행
-
-  if(hours < 10){
-    hours = '0'+ hours;
-  }
+useEffect(() => {
   if(month < 10){
-    month = '0'+ month;
+    setMonth('0'+ month);
   }
+  if(hours < 10){
+    setHours('0'+ hours);
+  }
+}, [])
+
+  
   if(day < 10){
     day = '0'+ day;
   }
   today = year+ "" + month + '' + day;
-  console.log(hours)
+  
   for(let i = 0; i < forecastNoticeTime.length; i++){
     let h = Number(forecastNoticeTime[i]) - Number(hours);
-    console.log('h:',h)
+    
     if( h === 0 || h === -1 || h === -2 ){
       nowNoticeTime = Number(forecastNoticeTime[i]);
     }
@@ -44,7 +47,7 @@ const useTime:any = () => {
   if(nowNoticeTime < 10){
     nowNoticeTime ='0' + nowNoticeTime
   }
-  console.log(nowNoticeTime)
+
   return {
     today,
     nowNoticeTime,
