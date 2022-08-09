@@ -50,6 +50,7 @@ interface OceansBeachTypes {
   num: number;
   sido_nm: string;
   sta_nm: string;
+  gugun_nm:string;
   beach_wid: number;
   beach_len: string;
   beach_knd: string | null;
@@ -88,7 +89,7 @@ const KakaoMap = () => {
   const [isOceansBeachSearch, setIsOceansBeachSearch] = useState<boolean>(false);
   const [oceansBeach, setOceansBeach] = useState<OceansBeachTypes[]>([]);
   const [oceansBeachTotalCount, setOceansBeachTotalCount] = useState(0);
-  
+  const [isLoading,setIsLoading] = useState(false);
   const [weatherInMiniPopup, setWeatherInMiniPopup] =
     useState<MiniWeatherDetailsTypes>({
       pop: [],
@@ -118,6 +119,7 @@ const KakaoMap = () => {
   };
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    setIsLoading(true)
     setIsGeneralSearch(true);
     setIsOceansBeachSearch(false);
     e.preventDefault();
@@ -195,7 +197,7 @@ const KakaoMap = () => {
                 (data: any, status: any, pagination: any) => {
                   if (status === window.kakao.maps.services.Status.OK) {
                     let bounds = new window.kakao.maps.LatLngBounds();
-                    
+                    console.log(data)
                     setPlaces(data);
                     paginationRef.current = pagination;
                     for (let i = 0; i < data.length; i++) {
@@ -209,9 +211,11 @@ const KakaoMap = () => {
                 }
               );
             });
+            setIsLoading(false);
         });
       }
     });
+
   };
 
   const displayMarker = (place: any) => {
@@ -235,14 +239,31 @@ const KakaoMap = () => {
       image: markerImage,
     });
 
+    let hoverInfowindow =  new window.kakao.maps.CustomOverlay({
+      content:/*jsx*/`
+        <div class="w-fit p-4 h-full text-center rounded-lg bg-slate-600 text-white">
+        <p>${place.place_name}</p>
+        <p class="text-xs py-2">${place.address_name}</p>
+        </div>
+        
+        `,
+      position: new window.kakao.maps.LatLng(place.y, place.x),
+      xAnchor: 0.6,
+      yAnchor: 1.5
+    })
+    
+    window.kakao.maps.event.addListener(marker, 'mouseover', () =>{ hoverInfowindow.setMap(map.current)})
+    window.kakao.maps.event.addListener(marker, 'mouseout', () =>{ hoverInfowindow.setMap(null)})
     window.kakao.maps.event.addListener(marker, 'click', () =>
       markerClickHandler(place, marker, 'general')
     );
+    
   };
 
   
   //
   const markerClickHandler = (place: any, marker: any, type: string) => {
+    setIsLoading(true);
     setWeatherInMiniPopup({
       pop: [],
       pcp: [],
@@ -258,40 +279,12 @@ const KakaoMap = () => {
         )
       )
       .catch((err) => console.log(err))
-
-      // 지금부터 5시간...
-      // console.log(Number(afterFiveHours + '00'));
-      // console.log(today);
-
       .then((resolve: any) => {
         const weatherInThisPlace: ResponseDataTypes[] =
           resolve.data.response.body.items.item;
 
         console.log(weatherInThisPlace);
         console.log(afterFiveHours);
-        // const filteredWeather: any = [];
-        // weatherInThisPlace.map((item) => {
-
-        //   if (Number(item.baseTime) < 2000) {
-        //     if (item.fcstDate === today &&Number(item.fcstTime) <= Number(afterFiveHours + '00')) {
-        //       filteredWeather.push(item);
-        //     }
-        //   }
-        //   // || Number(item.fcstDate) === Number(today) + 1 && Number(item.fcstTime) - 2400 < Number(afterFiveHours + '00')
-        //   if (Number(item.baseTime) === 2000 && Number(item.fcstDate) === Number(today) && Number(item.fcstTime) <= Number(afterFiveHours + '00')) {
-        //       filteredWeather.push(item);
-
-        //   }
-        //   if (Number(item.baseTime) === 2300) {
-        //     if (
-        //       Number(item.fcstDate) === Number(today) + 1 &&
-        //       Number(item.fcstTime) <= Number(afterFiveHours + '00')
-        //     ) {
-        //       filteredWeather.push(item);
-        //     }
-        //   }
-        // });
-        // console.log(filteredWeather)
 
         const tmp: any = [];
         const pcp: any = [];
@@ -377,14 +370,14 @@ const KakaoMap = () => {
               place.sta_nm
             } 해수욕장</p>
          
-          <p><img class="rounded-full w-48 h-48" src="/public/beach${nb}.jpg" alt="" /></p>
+          <p><img class="rounded-full w-48 h-48" src="/beach${nb}.jpg" alt="" /></p>
           <a href=${
             place.link_addr
           } target="_blank" class="flex-[2] text-blue-400 hover:text-rose-400">해당 사이트로 이동</a>
           <p class="text-xs font-semibold text-rose-500 flex-[1]">가까운 보건소 전화번호</p>
-          <p class="text-xs text-gray-400" class="flex-2">${
-            place.link_tel || '전화번호 미등록 해수욕장입니다.'
-          }</p>
+          <p class="text-xs text-gray-400" class="flex-2">${place.link_tel || '전화번호 미등록 해수욕장입니다.'}</p>
+          
+          
           <div class="flex flex-col items-center justify-center">
             <h3 class="truncate text-xs py-2">오늘의 <span class="font-bold">${
               place.sta_nm
@@ -429,17 +422,10 @@ const KakaoMap = () => {
           content: iwContent,
           removable: iwRemoveable,
         });
-        let hoverInfowindow = new window.kakao.maps.InfoWindow({
-          content:place.sta_nm,
-          removable: iwRemoveable
-        })
-        hoverInfowindow.open(map.current, marker);
+        infowindow.close()
         infowindow.open(map.current,marker);
-        
-
-
-
       });
+      setIsLoading(false);
   };
 
 
@@ -486,6 +472,7 @@ const KakaoMap = () => {
     setSido(sido);
     setIsGeneralSearch(false);
     setIsOceansBeachSearch(true);
+    setIsLoading(true)
     try {
       const response = await axios.get(
         `https://www.meis.go.kr/service/OceansBeachInfoService/getOceansBeachInfo?pageNo=${currentPage}&numOfRows=15&resultType=json&SIDO_NM=${sido}&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`
@@ -535,18 +522,36 @@ const KakaoMap = () => {
         bounds.extend(new window.kakao.maps.LatLng(item.y, item.x));
         window.kakao.maps.event.addListener(marker, 'click', () =>
           markerClickHandler(item, marker, 'beach')
-        );    
+        );
+        let hoverInfowindow = new window.kakao.maps.CustomOverlay({
+          content:/* jsx */`
+            <div class="w-fit text-center rounded-lg bg-sky-400 text-white p-4 shadow-sm shadow-white">
+            <p class="font-bold text-xl py-1">${item.sta_nm}해수욕장</p>
+            <p class="text-xs font-bold pt-1">${item.gugun_nm}</p>
+            <p class="text-xs font-bold pt-1">해변의 길이: ${item.beach_len ?  item.beach_len + 'M' : "정보 없음"}</p>
+            <p class="text-xs font-bold pt-1">해변의 너비: ${item.beach_wid ?  item.beach_wid + 'M' : "정보 없음"}</p>
+            </div>`,
+          position: new window.kakao.maps.LatLng(item.y, item.x),
+          xAnchor: 0.5,
+          yAnchor: 1.5
+        })
+      window.kakao.maps.event.addListener(marker, 'mouseover', () =>{ hoverInfowindow.setMap(map.current)})
+      window.kakao.maps.event.addListener(marker, 'mouseout', () =>{
+        hoverInfowindow.setMap(null)
+        
+      })
       });
       
       map.current.setBounds(bounds);
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false)
   };
   
   return (
     <>
-      <ul className="flex flex-row justify-between items-center gap-2 py-2 border w-[90%] mx-auto p-4 bg-slate-400 bg-opacity-60">
+      <ul className="flex flex-row justify-between items-center gap-2 py-2 border w-[90%] mx-auto p-4 bg-sky-400 rounded-tl-lg rounded-tr-lg bg-opacity-60">
         
         {SIDO_NM_ARRAY.map((sido) => (
           <li key={sido}>
@@ -558,10 +563,14 @@ const KakaoMap = () => {
             </button>
           </li>
         ))}
+        
       </ul>
-      <div className="relative w-[90%] h-[500px] mx-auto">
+      <div className='relative'>
+      {isLoading && <div className='absolute z-20 left-[45%] top-[20%]'>검색중입니다...</div>}
+      </div>
+      <div className="relative w-[90%] h-[600px] mx-auto">
         <div className="">
-          <div ref={mapRef} className="w-[100%] h-[500px] mx-auto"></div>
+          <div ref={mapRef} className="w-[100%] h-[580px] mx-auto"></div>
           <div>
           <div id="menu_wrap" className="">
             <div className="option ">

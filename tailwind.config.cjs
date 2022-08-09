@@ -6,7 +6,16 @@ module.exports = {
     './src/**/*.{js,ts,tsx,jsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation : {
+        blink: 'blink 0.5s infinite',
+      },
+      keyframes: {
+        blink : {
+          '0%' : {opacity: 0}
+        }
+      }
+    },
   },
   plugins: [
     require('tailwind-scrollbar')

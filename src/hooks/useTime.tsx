@@ -5,9 +5,9 @@ const useTime:any = () => {
   const [month,setMonth] = useState<string|number>(date.getMonth() + 1);
   const [hours,setHours] = useState<string|number>(date.getHours());
   const [year,setYear] = useState<string|number>(date.getFullYear());
-  
+  const [day,setDay] = useState<string|number>(date.getDate())
   // let month:string | number = date.getMonth() + 1;
-  let day: string | number = date.getDate();
+  
   // let hours: string | number = date.getHours();
   let afterFiveHours: string | number = date.getHours() + 5 > 24 ? date.getHours() - 19 : date.getHours() + 5
   afterFiveHours = afterFiveHours < 10 ? "0" + afterFiveHours : afterFiveHours
@@ -25,12 +25,13 @@ useEffect(() => {
   if(hours < 10){
     setHours('0'+ hours);
   }
+  if(day < 10){
+    setDay('0'+ day);
+  }
 }, [])
 
   
-  if(day < 10){
-    day = '0'+ day;
-  }
+
   today = year+ "" + month + '' + day;
   
   for(let i = 0; i < forecastNoticeTime.length; i++){
