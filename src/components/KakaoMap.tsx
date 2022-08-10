@@ -2,6 +2,7 @@
 import React, {
   ChangeEvent,
   FormEvent,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -61,6 +62,11 @@ interface OceansBeachTypes {
   y: number;
 }
 
+interface filteredWaterQualityTypes {
+  res1:string
+  res2:string
+  res_yn:string
+}
 const { kakao } = window;
 
 const SIDO_NM_ARRAY: string[] = [
@@ -104,6 +110,11 @@ const KakaoMap = () => {
     sky: [],
   });
   const [sido, setSido] = useState('')
+  
+
+
+
+
   const calcLatLng = useConvertLatLng();
   const { today, nowNoticeTime, afterFiveHours, hours } = useTime();
   
@@ -114,9 +125,22 @@ const KakaoMap = () => {
   const placeListRef = useRef<any>(null);
   const paginationRef = useRef<any>(null);
   const customInfo = useRef<any>(null);
+
+  
+
   const keywordChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setKeywordValue(e.currentTarget.value);
   };
+
+
+  const fetchData = useCallback(async() => {
+    const getSido = sido
+    const response:any = await axios.get(`https://www.meis.go.kr/service/OceansBeachSeawaterService/getOceansBeachSeawaterInfo?pageNo=1&numOfRows=1500&resultType=json&SIDO_NM=${getSido}&RES_YEAR=2016&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`)
+
+
+  }, [])
+
+
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     setIsLoading(true)
@@ -219,6 +243,7 @@ const KakaoMap = () => {
   };
 
   const displayMarker = (place: any) => {
+   
     if (!weatherInMiniPopup.pcp) return;
     setPlaceMarkers((prev) => [...prev, marker]);
 
@@ -255,35 +280,48 @@ const KakaoMap = () => {
     window.kakao.maps.event.addListener(marker, 'mouseover', () =>{ hoverInfowindow.setMap(map.current)})
     window.kakao.maps.event.addListener(marker, 'mouseout', () =>{ hoverInfowindow.setMap(null)})
     window.kakao.maps.event.addListener(marker, 'click', () =>
-      markerClickHandler(place, marker, 'general')
+      markerClickHandler(place, marker, 'general',"")
     );
-
+   
     
   };
   //
 
-
+  
 
   //
-  const markerClickHandler = (place: any, marker: any, type: string) => {
+  const markerClickHandler = (place: any, marker: any, type: string,sido:string) => {
     setIsLoading(true);
-    console.log('loading...')
+    
     setWeatherInMiniPopup({
       pop: [],
       pcp: [],
       tmp: [],
     });
-    console.log(place.x, place.y);
+    
+   
     new Promise((resolve) => {
       resolve(calcLatLng(Number(place.x), Number(place.y)));
     })
       .then((resolve: any) =>
-        axios.get(
-          `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=80&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`
-        )
-      )
+        axios.get(`https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=80&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`))
       .catch((err) => console.log(err))
-      .then((resolve: any) => {
+      .then( async (resolve: any) => {
+       let filteredOceansWaterQuality;
+        try{
+          const getSido = sido
+          const response:any = await axios.get(`https://www.meis.go.kr/service/OceansBeachSeawaterService/getOceansBeachSeawaterInfo?pageNo=1&numOfRows=1500&resultType=json&SIDO_NM=${getSido}&RES_YEAR=2016&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`)
+          const responseData = response.data.getOceansBeachSeawaterInfo.item;
+          filteredOceansWaterQuality = responseData.filter((item:any) => item.sta_nm === place.sta_nm).pop()
+          console.log(filteredOceansWaterQuality);
+        }catch(err){
+          console.error(err)
+        }
+        
+        
+        
+        // const testing = filteredWaterQuality.filter((item:any) => item.sta_nm === place.sta_nm).pop();
+        // console.log(testing);
         const weatherInThisPlace: ResponseDataTypes[] =
           resolve.data.response.body.items.item;
 
@@ -298,7 +336,7 @@ const KakaoMap = () => {
           }
         });
 
-        console.log(tmp);
+        
         if (tmp.length > 5) {
           tmp.length = 5;
           pcp.length = 5;
@@ -382,11 +420,6 @@ const KakaoMap = () => {
           <p class="text-xs text-gray-400" class="flex-1">${place.link_tel || '전화번호 미등록 해수욕장입니다.'}</p>
           
   
-
-
-
-
-
     <div class="border-b border-gray-200 ">
     <ul class="flex justify-center items-center -mb-px text-sm font-medium text-center">
       <li class="mr-2 overlay-tabs--list active cursor-pointer" data-tab="tab1">
@@ -419,7 +452,26 @@ const KakaoMap = () => {
           ${pcp.map((item: ResponseDataTypes) => {return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstValue === '강수없음'? '맑음': item.fcstValue.split('.')[0] + 'mm'}</span></div>`;}).join('')}
           </div>
           </div>
-      <div id="tab2" class="overlay-content" >해양오염이 심각하빈다</div>
+      <div id="tab2" class="overlay-content" >
+      
+      <div class="grid grid-flow-col grid-cols-3 mt-2">
+      <div class="col-span-2">
+      <h3 class="ml-4 text-sm font-bold">
+      ${filteredOceansWaterQuality?.res1 === "0" || filteredOceansWaterQuality?.res2 === "0" ? `<span class="text-center">물이 맑은 ${place.sta_nm} 해수욕장</span>` :"" }
+      ${Number(filteredOceansWaterQuality?.res1) > 100 || Number(filteredOceansWaterQuality?.res1) > 100 ? "적합하지만 주의가 필요해요!" :"" }
+      
+      </h3>
+
+      ${filteredOceansWaterQuality?.res_yn === "적합" ? "<img class='w-28 h-24' src='/approved.png' />" : "여행금지!"}
+      </div>
+      <div class="col-span-1 flex flex-col justify-center items-start mx-auto">
+      <div><span class="text-xs">대장균: ${filteredOceansWaterQuality?.res1}</span></div>
+      <div><span class="text-xs">장구균: ${filteredOceansWaterQuality?.res2}</span></div>
+      <div><span class="text-xs">적합여부: ${filteredOceansWaterQuality?.res_yn}</span></div>
+      </div>
+      
+      </div>
+      </div>
       <div id="tab3" class="overlay-content" >모래에 카드뮴 검출!!</div>
       <div id="tab4" class="overlay-content" >이돈이면 신라호텔 호캉스갑니다</div>
     </div>
@@ -427,7 +479,7 @@ const KakaoMap = () => {
   </div>
           `;
         }
-
+        // filteredWaterQuality res1 , res2 , resYn
         customInfo.current = new window.kakao.maps.CustomOverlay({
           content: iwContent,
           position: marker.getPosition(),
@@ -438,20 +490,15 @@ const KakaoMap = () => {
         
       const overlayCloseButton = document.getElementById('cb')
       overlayCloseButton?.addEventListener('click',closeOverlay);
-
       
-       
-       
-      }).then(() => {
       const overlayTabsList = document.querySelectorAll('.overlay-tabs--list');
       const overlayTabsContent = document.querySelectorAll('.overlay-content')
       const waterTabButton = document.querySelector('#water')
       const sandTabButton = document.querySelector('#sand')
       const reviewTabButton = document.querySelector('#review')
-
-      waterTabButton?.addEventListener('click', () => {
-        
-      })
+      
+      
+      
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
           const tabTarget = item.currentTarget;
@@ -466,12 +513,16 @@ const KakaoMap = () => {
           tabTarget.classList.add("active")
         });
        })
-      });
+      
+       
+       
+      })
+      
+      
 
 
       setIsLoading(false)
   };
-
   
 
 
@@ -515,8 +566,11 @@ const KakaoMap = () => {
     };
   }, []);
 
+
+
   const sidoClickHandler = async (sido: string,currentPage = 1) => {
     setSido(sido);
+    
     setIsGeneralSearch(false);
     setIsOceansBeachSearch(true);
     setIsLoading(true)
@@ -542,8 +596,8 @@ const KakaoMap = () => {
       setOceansBeachTotalCount(response.data.getOceansBeachInfo.totalCount);
       console.log(response.data.getOceansBeachInfo.totalCount)
       setPlaces(oceansBeachArray);
-      console.log(oceansBeachArray);
-
+      
+      
 
 
       let bounds = new window.kakao.maps.LatLngBounds();
@@ -568,7 +622,7 @@ const KakaoMap = () => {
         marker.setMap(map.current);
         bounds.extend(new window.kakao.maps.LatLng(item.y, item.x));
         window.kakao.maps.event.addListener(marker, 'click', () =>
-          markerClickHandler(item, marker, 'beach')
+          markerClickHandler(item, marker, 'beach',sido)
         );
         let hoverInfowindow = new window.kakao.maps.CustomOverlay({
           content:/* jsx */`
@@ -595,7 +649,12 @@ const KakaoMap = () => {
     }
     setIsLoading(false)
   };
-  
+
+
+
+
+
+
   return (
     <>
       <ul className="flex flex-row justify-between items-center gap-2 py-2 border w-[90%] mx-auto p-4 bg-sky-400 rounded-tl-lg rounded-tr-lg bg-opacity-60">
