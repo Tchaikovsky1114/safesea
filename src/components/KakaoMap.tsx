@@ -500,9 +500,7 @@ const KakaoMap = () => {
       
       const overlayTabsList = document.querySelectorAll('.overlay-tabs--list');
       const overlayTabsContent = document.querySelectorAll('.overlay-content')
-      const waterTabButton = document.querySelector('#water')
-      const sandTabButton = document.querySelector('#sand')
-      const reviewTabButton = document.querySelector('#review')
+
       
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
@@ -647,11 +645,6 @@ const KakaoMap = () => {
     }
     setIsLoading(false)
   };
-
-
-
-
-
 
   return (
     <>

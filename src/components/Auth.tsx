@@ -1,4 +1,5 @@
 import React from 'react';
+import NaverLogin from './NaverLogin';
 
 const Auth = () => {
   return (
@@ -8,8 +9,7 @@ const Auth = () => {
       <button className='border p-4 px-8 border-black font-bold text-sm'>구글로 로그인</button>
       <button className='border p-4 px-8 border-black font-bold text-sm'>페이스북으로 로그인</button>
       <button className='border p-4 px-8 border-black font-bold text-sm'>카카오로 로그인</button>
-      <button className='border p-4 px-8 border-black font-bold text-sm'>네이버로 로그인</button>
-      
+      <NaverLogin />
       </div>
     </div>
   );
