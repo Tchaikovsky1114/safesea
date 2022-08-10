@@ -113,7 +113,7 @@ const KakaoMap = () => {
   const geo = useRef<any>(null);
   const placeListRef = useRef<any>(null);
   const paginationRef = useRef<any>(null);
-  const info = useRef<any>(null);
+  const customInfo = useRef<any>(null);
   const keywordChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setKeywordValue(e.currentTarget.value);
   };
@@ -257,13 +257,17 @@ const KakaoMap = () => {
     window.kakao.maps.event.addListener(marker, 'click', () =>
       markerClickHandler(place, marker, 'general')
     );
+
     
   };
+  //
 
-  
+
+
   //
   const markerClickHandler = (place: any, marker: any, type: string) => {
     setIsLoading(true);
+    console.log('loading...')
     setWeatherInMiniPopup({
       pop: [],
       pcp: [],
@@ -282,9 +286,6 @@ const KakaoMap = () => {
       .then((resolve: any) => {
         const weatherInThisPlace: ResponseDataTypes[] =
           resolve.data.response.body.items.item;
-
-        console.log(weatherInThisPlace);
-        console.log(afterFiveHours);
 
         const tmp: any = [];
         const pcp: any = [];
@@ -305,10 +306,11 @@ const KakaoMap = () => {
 
         let iwRemoveable = true;
         let iwContent;
-
+        
         if (type === 'general') {
           iwContent = /*jsx */ `
-        <div class=" w-80 h-96 flex flex-col items-center justify-start gap-4 p-6">
+        <div class=" w-80 h-96 flex flex-col items-center justify-start gap-4 p-6 bg-sky-900 text-white rounded-md">
+        <button id="cb" class="absolute top-0 right-0 cursor-pointer p-2">X</button>
           <p class="text-center font-bold px-4 flex-[3] w-72">${
             place.place_name
           }</p>
@@ -360,76 +362,117 @@ const KakaoMap = () => {
       </div>
         `;
         }
+        function closeOverlay() {customInfo.current.setMap(null)};
         let min = Math.ceil(1);
         let max = Math.floor(20);
         const nb = Math.ceil(Math.random() * (max - min))
         if (type === 'beach') {
           iwContent = /*jsx */ `
-          <div class=" w-80 max-h-fit flex flex-col items-center justify-start gap-4 p-6">
-            <p class="text-center font-bold px-4 flex-[3] w-72">${
+          <div class="relative w-fit max-h-fit flex flex-col items-center justify-start gap-4 px-6 py-2 bg-sky-900 text-white rounded-md">
+          <button id="cb" class="absolute top-0 right-0 cursor-pointer p-2">X</button>
+            <p class="text-center font-bold px-4 flex-[3] w-full border-transparent border border-b-white pb-4">${
               place.sta_nm
             } 해수욕장</p>
          
-          <p><img class="rounded-full w-48 h-48" src="/beach${nb}.jpg" alt="" /></p>
+          <p><img class="rounded-full w-40 h-40" src="/beach${nb}.jpg" alt="" /></p>
           <a href=${
             place.link_addr
           } target="_blank" class="flex-[2] text-blue-400 hover:text-rose-400">해당 사이트로 이동</a>
-          <p class="text-xs font-semibold text-rose-500 flex-[1]">가까운 보건소 전화번호</p>
-          <p class="text-xs text-gray-400" class="flex-2">${place.link_tel || '전화번호 미등록 해수욕장입니다.'}</p>
+          <p class="text-xs font-semibold text-rose-500 flex-1">가까운 보건소 전화번호</p>
+          <p class="text-xs text-gray-400" class="flex-1">${place.link_tel || '전화번호 미등록 해수욕장입니다.'}</p>
           
-          
-          <div class="flex flex-col items-center justify-center">
-            <h3 class="truncate text-xs py-2">오늘의 <span class="font-bold">${
-              place.sta_nm
-            }</span>해수욕장 날씨</h3>
+  
+
+
+
+
+
+    <div class="border-b border-gray-200 ">
+    <ul class="flex justify-center items-center -mb-px text-sm font-medium text-center">
+      <li class="mr-2 overlay-tabs--list active cursor-pointer" data-tab="tab1">
+        <a id="weather" class="overlay-tab--btn inline-flex p-2 pb-1  text-green-600 hover:text-yellow-300 group" >날씨</a>
+      </li>
+      <li class="mr-2 overlay-tabs--list cursor-pointer " data-tab="tab2">
+        <a id="water" class="overlay-tab--btn inline-flex p-2 pb-1  rounded-t-lg border-b-2 border-transparent hover:text-yellow-300 text-blue-600 group">수질</a>
+      </li>
+      <li  class="mr-2 overlay-tabs--list cursor-pointer " data-tab="tab3">
+        <a id="sand" class="overlay-tab--btn inline-flex p-2 pb-1 rounded-t-lg border-b-2 border-transparent  hover:text-yellow-300 text-yellow-800 group">모래</a>
+      </li>
+      <li class="mr-2 overlay-tabs--list cursor-pointer " data-tab="tab4">
+        <a id="review" class="overlay-tab--btn inline-flex p-2 pb-1 rounded-t-lg border-b-2 border-transparent  hover:text-yellow-300 text-rose-500 group">후기</a>
+      </li>
+    </ul>
+
+    <div id="tab1" class="overlay-content flex-col items-center justify-center target">
+            <h3 class="truncate text-xs py-2">오늘의 <span class="font-bold">${place.sta_nm}</span>해수욕장 날씨</h3>
           <div class="flex flex-row justify-start items-center">
             <div class="flex justify-center items-center w-10 h-8"><img src="https://e7.pngegg.com/pngimages/473/569/png-clipart-graphy-clock-clock-icon-angle-number-thumbnail.png" alt="thermometer" class="w-4 mx-auto" /></div>
-          ${tmp
-            .map((item: ResponseDataTypes) => {
-              return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstTime.substr(
-                0,
-                2
-              )}</span>시</div>`;
-            })
-            .join('')}
+          ${tmp.map((item: ResponseDataTypes) => {
+              return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstTime.substr(0,2)}</span>시</div>`;}).join('')}
           </div>
           <div class="flex flex-row justify-start items-center">
             <div class="flex justify-center items-center w-10 h-8"><img src="https://upload.wikimedia.org/wikipedia/en/d/d5/Thermometer_icon.png" alt="thermometer" class="w-4 mx-auto" /></div>
-          ${tmp
-            .map((item: ResponseDataTypes) => {
-              return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstValue}</span>도</div>`;
-            })
-            .join('')}
+          ${tmp.map((item: ResponseDataTypes) => {return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstValue}</span>도</div>`;}).join('')}
           </div>
           <div class="flex flex-row justify-start items-center">
             <div class="flex justify-center items-center w-10 h-8"><img src="https://cdn2.iconfinder.com/data/icons/weather-flat-14/64/weather07-512.png" alt="thermometer" class="w-4 mx-auto" /></div>
-          ${pcp
-            .map((item: ResponseDataTypes) => {
-              return `<div class=" max-w-[40px] min-h-[32px] px-2 text-[10px] flex items-center justify-start"><span class="font-bold">${
-                item.fcstValue === '강수없음'
-                  ? '맑음'
-                  : item.fcstValue.split('.')[0] + 'mm'
-              }</span></div>`;
-            })
-            .join('')}
+          ${pcp.map((item: ResponseDataTypes) => {return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstValue === '강수없음'? '맑음': item.fcstValue.split('.')[0] + 'mm'}</span></div>`;}).join('')}
           </div>
           </div>
-        </div>
+      <div id="tab2" class="overlay-content" >해양오염이 심각하빈다</div>
+      <div id="tab3" class="overlay-content" >모래에 카드뮴 검출!!</div>
+      <div id="tab4" class="overlay-content" >이돈이면 신라호텔 호캉스갑니다</div>
+    </div>
+
+  </div>
           `;
         }
 
-        let infowindow = new window.kakao.maps.InfoWindow({
+        customInfo.current = new window.kakao.maps.CustomOverlay({
           content: iwContent,
-          removable: iwRemoveable,
+          position: marker.getPosition(),
+          xAnchor: 0.5,
+          yAnchor: 1,
         });
-        infowindow.close()
-        infowindow.open(map.current,marker);
+      customInfo.current.setMap(map.current)
+        
+      const overlayCloseButton = document.getElementById('cb')
+      overlayCloseButton?.addEventListener('click',closeOverlay);
+
+      
+       
+       
+      }).then(() => {
+      const overlayTabsList = document.querySelectorAll('.overlay-tabs--list');
+      const overlayTabsContent = document.querySelectorAll('.overlay-content')
+      const waterTabButton = document.querySelector('#water')
+      const sandTabButton = document.querySelector('#sand')
+      const reviewTabButton = document.querySelector('#review')
+
+      waterTabButton?.addEventListener('click', () => {
+        
+      })
+       overlayTabsList.forEach((item) => {
+        item.addEventListener('click',(item:any) => {
+          const tabTarget = item.currentTarget;
+          const target = tabTarget.dataset.tab
+          overlayTabsList.forEach((list) => {
+            list.classList.remove("active");
+          })
+          overlayTabsContent.forEach((target) => {
+            target.classList.remove("target");
+          });
+          document.querySelector("#" + target)?.classList.add("target");
+          tabTarget.classList.add("active")
+        });
+       })
       });
-      setIsLoading(false);
+
+
+      setIsLoading(false)
   };
 
-
-
+  
 
 
   
@@ -457,9 +500,13 @@ const KakaoMap = () => {
 
         ps.current = new window.kakao.maps.services.Places();
         geo.current = new window.kakao.maps.services.Geocoder();
+        customInfo.current = new window.kakao.maps.CustomOverlay({
+          content: 'Hi Welcome!',
+          position:new window.kakao.maps.LatLng(33.450701, 126.570667),
+          xAnchor: 0.5,
+          yAnchor: 1,
+        });
 
-        info.current = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-        // marker
       });
     };
 
@@ -682,7 +729,7 @@ const KakaoMap = () => {
  
         <div className=" mt-2">
           <button
-            className="text-sm font-bold py-2 px-4 border border-slate-600 my-2  mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"
+            className="text-sm font-bold py-2 px-4 border border-slate-600 my-2 mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"
             onClick={() => {
               map.current.addOverlayMapTypeId(
                 window.kakao.maps.MapTypeId.TRAFFIC
