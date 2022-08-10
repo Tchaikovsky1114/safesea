@@ -110,11 +110,6 @@ const KakaoMap = () => {
     sky: [],
   });
   const [sido, setSido] = useState('')
-  
-
-
-
-
   const calcLatLng = useConvertLatLng();
   const { today, nowNoticeTime, afterFiveHours, hours } = useTime();
   
@@ -131,16 +126,6 @@ const KakaoMap = () => {
   const keywordChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setKeywordValue(e.currentTarget.value);
   };
-
-
-  const fetchData = useCallback(async() => {
-    const getSido = sido
-    const response:any = await axios.get(`https://www.meis.go.kr/service/OceansBeachSeawaterService/getOceansBeachSeawaterInfo?pageNo=1&numOfRows=1500&resultType=json&SIDO_NM=${getSido}&RES_YEAR=2016&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`)
-
-
-  }, [])
-
-
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     setIsLoading(true)
@@ -286,9 +271,6 @@ const KakaoMap = () => {
     
   };
   //
-
-  
-
   //
   const markerClickHandler = (place: any, marker: any, type: string,sido:string) => {
     setIsLoading(true);
@@ -298,30 +280,36 @@ const KakaoMap = () => {
       pcp: [],
       tmp: [],
     });
-    
-   
+       
     new Promise((resolve) => {
       resolve(calcLatLng(Number(place.x), Number(place.y)));
     })
       .then((resolve: any) =>
         axios.get(`https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=80&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`))
       .catch((err) => console.log(err))
-      .then( async (resolve: any) => {
+      .then(
+        
+        async (resolve: any) => {
        let filteredOceansWaterQuality;
+       let filteredOceansSandQuality;
         try{
           const getSido = sido
           const response:any = await axios.get(`https://www.meis.go.kr/service/OceansBeachSeawaterService/getOceansBeachSeawaterInfo?pageNo=1&numOfRows=1500&resultType=json&SIDO_NM=${getSido}&RES_YEAR=2016&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`)
           const responseData = response.data.getOceansBeachSeawaterInfo.item;
           filteredOceansWaterQuality = responseData.filter((item:any) => item.sta_nm === place.sta_nm).pop()
-          console.log(filteredOceansWaterQuality);
+          
         }catch(err){
           console.error(err)
         }
-        
-        
-        
-        // const testing = filteredWaterQuality.filter((item:any) => item.sta_nm === place.sta_nm).pop();
-        // console.log(testing);
+        try {
+          const getSido = sido
+          const response:any = await axios.get(`https://www.meis.go.kr/service/OceansBeachSandService/getOceansBeachSandInfo?pageNo=1&numOfRows=1000&resultType=json&SIDO_NM=${getSido}&RES_YEAR=2016&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`)
+          const responseData = response.data.getOceansBeachSandInfo.item;
+          filteredOceansSandQuality = responseData.filter((item:any) => item.sta_nm === place.sta_nm).pop();
+          console.log(filteredOceansSandQuality);
+        } catch (error) {
+          
+        }
         const weatherInThisPlace: ResponseDataTypes[] =
           resolve.data.response.body.items.item;
 
@@ -458,21 +446,39 @@ const KakaoMap = () => {
       <div class="col-span-2">
       <h3 class="ml-4 text-sm font-bold">
       ${filteredOceansWaterQuality?.res1 === "0" || filteredOceansWaterQuality?.res2 === "0" ? `<span class="text-center">물이 맑은 ${place.sta_nm} 해수욕장</span>` :"" }
-      ${Number(filteredOceansWaterQuality?.res1) > 100 || Number(filteredOceansWaterQuality?.res1) > 100 ? "적합하지만 주의가 필요해요!" :"" }
+      ${Number(filteredOceansWaterQuality?.res1) > 100 || Number(filteredOceansWaterQuality?.res1) > 100 ? `<span class="text-center text-rose-600">적합하지만 주의가 필요해요!</span>` :"" }
       
       </h3>
 
       ${filteredOceansWaterQuality?.res_yn === "적합" ? "<img class='w-28 h-24' src='/approved.png' />" : "여행금지!"}
       </div>
       <div class="col-span-1 flex flex-col justify-center items-start mx-auto">
-      <div><span class="text-xs">대장균: ${filteredOceansWaterQuality?.res1}</span></div>
-      <div><span class="text-xs">장구균: ${filteredOceansWaterQuality?.res2}</span></div>
-      <div><span class="text-xs">적합여부: ${filteredOceansWaterQuality?.res_yn}</span></div>
+      <div><span class="text-xs font-bold">대장균: ${filteredOceansWaterQuality?.res1}</span></div>
+      <div><span class="text-xs font-bold">장구균: ${filteredOceansWaterQuality?.res2}</span></div>
+      <div><span class="text-xs font-bold">적합여부: ${filteredOceansWaterQuality?.res_yn}</span></div>
       </div>
       
       </div>
       </div>
-      <div id="tab3" class="overlay-content" >모래에 카드뮴 검출!!</div>
+      <div id="tab3" class="overlay-content" >
+
+      <div class="flex-1 flex flex-row justify-between items-start mt-2">
+      
+      <div>${filteredOceansSandQuality?.res_yn === "적합" ? "<img class='w-28 h-24' src='/approved.png' />" : "여행금지!" }</div>
+
+      <div class="flex flex-col justify-center items-center text-xs font-bold">
+      <div>카드뮴: ${filteredOceansSandQuality.res1}</div>
+      <div>비소: ${filteredOceansSandQuality.res2}</div>
+      <div>수은: ${filteredOceansSandQuality.res3}</div>
+      <div>납: ${filteredOceansSandQuality.res4}</div>
+      <div>6가크롬: ${filteredOceansSandQuality.res5}</div>
+      </div>
+
+      </div>
+
+      </div>
+
+
       <div id="tab4" class="overlay-content" >이돈이면 신라호텔 호캉스갑니다</div>
     </div>
 
@@ -480,6 +486,7 @@ const KakaoMap = () => {
           `;
         }
         // filteredWaterQuality res1 , res2 , resYn
+        // filteredSandQuality res1 === 카드뮴, res2 === 비소, res3 === 수은, res4 === 납, res5 === 6가크롬, res_yn,
         customInfo.current = new window.kakao.maps.CustomOverlay({
           content: iwContent,
           position: marker.getPosition(),
@@ -497,8 +504,6 @@ const KakaoMap = () => {
       const sandTabButton = document.querySelector('#sand')
       const reviewTabButton = document.querySelector('#review')
       
-      
-      
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
           const tabTarget = item.currentTarget;
@@ -513,14 +518,7 @@ const KakaoMap = () => {
           tabTarget.classList.add("active")
         });
        })
-      
-       
-       
       })
-      
-      
-
-
       setIsLoading(false)
   };
   
