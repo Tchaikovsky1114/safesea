@@ -8,8 +8,12 @@ import NaverLogin from '../components/NaverLogin';
 import Profile from '../components/Profile';
 import Restaurant from '../components/Restaurant';
 import TopNavigation from '../components/TopNavigation';
+import { useAppSelector } from '../store/store';
 
 const Root = () => {
+  const userState = useAppSelector((state) => state.user);
+  
+  console.log(userState);
   return (
     <>
     <TopNavigation />

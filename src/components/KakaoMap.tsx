@@ -323,7 +323,6 @@ const KakaoMap = () => {
             tmp.push(item);
           }
         });
-
         
         if (tmp.length > 5) {
           tmp.length = 5;
@@ -475,10 +474,7 @@ const KakaoMap = () => {
       </div>
 
       </div>
-
       </div>
-
-
       <div id="tab4" class="overlay-content" >이돈이면 신라호텔 호캉스갑니다</div>
     </div>
 

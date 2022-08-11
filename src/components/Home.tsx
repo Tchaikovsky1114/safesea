@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../store/store';
 import Banner from './Banner';
 import KakaoMap from './KakaoMap';
 
 const Home = () => {
-
+  const userSelector = useAppSelector((state) => state.user);
+  console.log(userSelector.userData.username);
+  
   return (
     <>
 

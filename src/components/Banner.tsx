@@ -7,6 +7,9 @@ const Banner = () => {
   let i = 0;
   let timer:any;
   const [blinkOut,setBlinkOut] = useState(false)
+
+
+  
 useEffect(() => {
   
   timer = () =>{
