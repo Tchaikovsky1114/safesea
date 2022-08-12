@@ -52,7 +52,6 @@ const NaverLogin = () => {
       // naverLogin.logout();naverLogin.user
       naverLogin.getLoginStatus((status: any) => {
         if (status) {
-          localStorage.setItem('user',JSON.stringify(naverLogin.user));
           dispatch(
             signInNaverHandler({
               email: naverLogin.user.email,
