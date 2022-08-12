@@ -10,16 +10,21 @@ import Restaurant from '../components/Restaurant';
 import TopNavigation from '../components/TopNavigation';
 import { useAppSelector } from '../store/store';
 
-const Root = () => {
+
+interface RootProps {
+  modalHandler : () => void
+}
+
+const Root = ({modalHandler}:RootProps) => {
   const userState = useAppSelector((state) => state.user);
   
   console.log(userState);
   return (
     <>
-    <TopNavigation />
+    <TopNavigation modalHandler={modalHandler} />
     
     <Routes>
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<Home />} />
       <Route path="auth" element={<Auth/>} />
       <Route path="profile" element={<Profile/>} />
       <Route path="leisure" element={<Leisure/>} />

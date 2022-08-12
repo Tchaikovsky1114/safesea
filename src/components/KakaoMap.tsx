@@ -661,13 +661,13 @@ const KakaoMap = () => {
       <div className='relative'>
       {isLoading && <div className='absolute z-20 left-[45%] top-[20%]'>검색중입니다...</div>}
       </div>
-      <div className="relative w-[90%] h-[600px] mx-auto">
+      <div className="relative w-[90%] h-[600px] mx-auto z-0">
         <div className="">
-          <div ref={mapRef} className="w-[100%] h-[580px] mx-auto"></div>
-          <div>
+          <div ref={mapRef} className="w-[100%] h-[580px] mx-auto "></div>
+          
           <div id="menu_wrap" className="">
             <div className="option ">
-              <form onSubmit={submitHandler} autoComplete="off">
+              <form onSubmit={submitHandler} autoComplete="off" >
                 지역명으로 검색해주세요!
                 <input
                   className="w-full border border-teal-400 h-8"
@@ -770,7 +770,7 @@ const KakaoMap = () => {
               </div>
             </div>
           </div>
-        </div>
+        
         </div>
  
         <div className=" mt-2">

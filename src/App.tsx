@@ -1,11 +1,21 @@
 import { useState } from 'react'
+import UserModal from './components/UserModal';
 import Root from './routes/Root'
 
 function App() {
   
+  const [isModalOpen,setIsModalOpen] = useState(false);
+  const modalHandler = () => {
+    setIsModalOpen(prev => !prev)
+  }
 
   return (
-    <Root />
+    <>
+      {isModalOpen &&
+       <UserModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} modalHandler={modalHandler} />
+    }
+    <Root modalHandler={modalHandler} />
+    </>
   )
 }
 
