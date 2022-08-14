@@ -3,6 +3,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import Auth from '../components/Auth';
 import Beaches from '../components/Beaches';
 import BeachItem from '../components/BeachItem';
+import BeachPost from '../components/BeachPost';
 import Home from '../components/Home';
 import Leisure from '../components/Leisure';
 import Lodged from '../components/Lodged';
@@ -34,7 +35,9 @@ const Root = ({modalHandler}:RootProps) => {
       <Route path="lodged" element={<Lodged/>} />
       <Route path="naver" element={<NaverLogin />} />
       <Route path="beaches" element={<Beaches />}>
-        <Route path=":beachId" element={<BeachItem />} />
+        <Route path=":beachId" element={<BeachItem />}>
+          <Route path="post" element={<BeachPost />} />
+        </Route>
       </Route>
     </Routes>
     </>

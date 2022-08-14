@@ -507,7 +507,8 @@ const KakaoMap = () => {
 
       </div>
       </div>
-      <div id="tab4" class="overlay-content" ><button id="review-button">후기 작성하러 가기</button></div>
+      <div id="tab4" class="overlay-content" >
+      <button class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</button></div>
     </div>
   </div>
           `;
