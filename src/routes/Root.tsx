@@ -4,6 +4,7 @@ import Auth from '../components/Auth';
 import Beaches from '../components/Beaches';
 import BeachItem from '../components/BeachItem';
 import BeachPost from '../components/BeachPost';
+import BeachReview from '../components/BeachReview';
 import Home from '../components/Home';
 import Leisure from '../components/Leisure';
 import Lodged from '../components/Lodged';
@@ -21,7 +22,7 @@ interface RootProps {
 const Root = ({modalHandler}:RootProps) => {
   const userState = useAppSelector((state) => state.user);
   
-  console.log(userState);
+  
   return (
     <>
     <TopNavigation modalHandler={modalHandler} />
@@ -35,9 +36,12 @@ const Root = ({modalHandler}:RootProps) => {
       <Route path="lodged" element={<Lodged/>} />
       <Route path="naver" element={<NaverLogin />} />
       <Route path="beaches" element={<Beaches />}>
+        
         <Route path=":beachId" element={<BeachItem />}>
+        <Route path=":postId" element={<BeachReview/>} />
           <Route path="post" element={<BeachPost />} />
         </Route>
+        
       </Route>
     </Routes>
     </>

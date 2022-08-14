@@ -2,7 +2,7 @@ import { HeartIcon } from '@heroicons/react/outline';
 import { HeartIcon as FullHeartIcon } from '@heroicons/react/solid';
 import { collection, deleteDoc, doc, DocumentData, getDoc, onSnapshot, orderBy, query, setDoc, startAfter } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import { db } from '../../firebase';
 import { useAppSelector } from '../store/store';
 
@@ -13,6 +13,7 @@ const nb = Math.ceil(Math.random() * (max - min))
 
 const BeachItem = () => {
   const {beachId} = useParams()
+  const location = useLocation()
   const [beachesInfo,setBeachesInfo] = useState<DocumentData>();
   const [like,setLike] = useState(false);
   const [likes,setLikes] = useState<DocumentData[]>([])
@@ -29,7 +30,7 @@ const BeachItem = () => {
     }
     fetchData()
   }, [])
-  console.log(beachesInfo);
+
 
   const likesHandler = async() => {
     if(!beachId) return
@@ -77,7 +78,7 @@ const BeachItem = () => {
     )
     return () => unsubscribe()
   }, [])
-  console.log(beachReview);
+  console.log(location);
   return (
     
       <div className='bg-sky-100 w-full h-full'>
@@ -96,7 +97,7 @@ const BeachItem = () => {
       className='border border-transparent w-24 py-1 mb-2 font-bold bg-rose-400 text-white hover:bg-rose-400/80 text-center mr-2 rounded-lg'>글쓰기</Link>
       </div>
       <ul>
-      {beachReview.map((review:any) => <li key={review.data().pid}><Link to={`${review.data().pid}`} >{review.data().title}</Link></li> )}
+      {beachReview.map((review:any) => <li key={review.data().pid}><Link to={`${review.data().pid}`} state={{data:review.data()}} >{review.data().title}</Link></li> )}
       </ul>
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 '>
       <Outlet />
