@@ -11,3 +11,9 @@
     @apply text-purple-600 rounded-t-lg border-b-2 border-purple-600
   }
 }
+img {
+  image-rendering: -webkit-optimize-contrast;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  
+}

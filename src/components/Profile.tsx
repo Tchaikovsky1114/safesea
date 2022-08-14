@@ -58,7 +58,7 @@ const Profile = () => {
     <div className='w-full my-0 mx-auto flex justify-center gap-8 flex-col items-center'>
       <p className='py-4'>{username}'s Profile</p> 
       <div className=''>
-      <div className="w-[200px] h-[200px] rounded-full relative"><img className='absolute top-0 rounded-full w-full' src={userState.userData.userImage} alt="image" /></div>
+      <div className="w-[200px] h-[200px] rounded-full relative"><img className='absolute top-0 rounded-full w-full h-full' src={userState.userData.userImage} alt="image" /></div>
       {selectedImage &&
       <>
       

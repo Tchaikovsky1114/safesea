@@ -13,7 +13,10 @@ import useConvertLatLng, { RsTypes } from '../hooks/useConvertLatLng';
 import useTime from '../hooks/useTime';
 import Weather from './Weather';
 import WeatherDetails from './WeatherDetails';
-
+import {HeartIcon} from '@heroicons/react/outline'
+import InfowindowSkeleton from './InfowindowSkeleton';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
 declare global {
   interface Window {
     kakao: any;
@@ -67,6 +70,21 @@ interface filteredWaterQualityTypes {
   res2:string
   res_yn:string
 }
+interface BeachData {
+  beach_knd: string | null
+beach_len: number | null
+beach_wid: number | null
+gugun_nm: string
+lat: string
+link_tel: string | null
+lon: string
+sido_nm: string
+sta_nm: string 
+num: number
+link_addr:string
+link_nm:string;
+beach_img:null
+}
 const { kakao } = window;
 
 const SIDO_NM_ARRAY: string[] = [
@@ -82,6 +100,8 @@ const SIDO_NM_ARRAY: string[] = [
   '제주',
 ];
 
+const LOCAL_URL = 'http://localhost:5173'
+
 const KakaoMap = () => {
   const [keywordValue, setKeywordValue] = useState('');
   const [zoomLevel, setZoomLevel] = useState(7);
@@ -96,6 +116,7 @@ const KakaoMap = () => {
   const [oceansBeach, setOceansBeach] = useState<OceansBeachTypes[]>([]);
   const [oceansBeachTotalCount, setOceansBeachTotalCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
+  
   const [weatherInMiniPopup, setWeatherInMiniPopup] =
     useState<MiniWeatherDetailsTypes>({
       pop: [],
@@ -121,14 +142,18 @@ const KakaoMap = () => {
   const paginationRef = useRef<any>(null);
   const customInfo = useRef<any>(null);
 
-  
+
 
   const keywordChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setKeywordValue(e.currentTarget.value);
   };
 
+
+
+
+  // create loading component
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true)
+    
     setIsGeneralSearch(true);
     setIsOceansBeachSearch(false);
     e.preventDefault();
@@ -220,7 +245,7 @@ const KakaoMap = () => {
                 }
               );
             });
-            setIsLoading(false);
+          
         });
       }
     });
@@ -233,7 +258,7 @@ const KakaoMap = () => {
     setPlaceMarkers((prev) => [...prev, marker]);
 
     let imageSrc =
-      'https://velog.velcdn.com/images/tchaikovsky/post/ada07148-1190-4dd6-bd2c-e7a22e2237f8/image.png';
+      'https://i.pinimg.com/originals/d9/7f/ea/d97feac57bebf6007994f6a6286d005b.png';
     let imageSize = new window.kakao.maps.Size(45, 50);
     let imageOption = { offset: new window.kakao.maps.Point(15, 45) };
 
@@ -271,7 +296,9 @@ const KakaoMap = () => {
     
   };
   //
-  //
+  
+
+
   const markerClickHandler = (place: any, marker: any, type: string,sido:string) => {
     setIsLoading(true);
     
@@ -286,9 +313,9 @@ const KakaoMap = () => {
     })
       .then((resolve: any) =>
         axios.get(`https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&numOfRows=80&pageNo=1&base_date=${today}&base_time=${nowNoticeTime}00&nx=${resolve.x}&ny=${resolve.y}&dataType=json`))
+
       .catch((err) => console.log(err))
       .then(
-        
         async (resolve: any) => {
        let filteredOceansWaterQuality;
        let filteredOceansSandQuality;
@@ -391,13 +418,17 @@ const KakaoMap = () => {
         let min = Math.ceil(1);
         let max = Math.floor(20);
         const nb = Math.ceil(Math.random() * (max - min))
+        
+
+
+
+        let isLiked = false;
         if (type === 'beach') {
+          
           iwContent = /*jsx */ `
-          <div class="relative w-fit max-h-fit flex flex-col items-center justify-start gap-4 px-6 py-2 bg-sky-900 text-white rounded-md">
+          <div class="relative w-fit max-h-fit flex flex-col items-center justify-start gap-4 px-6 py-2 bg-sky-900 text-white rounded-md md:min-w-[320px]">
           <button id="cb" class="absolute top-0 right-0 cursor-pointer p-2">X</button>
-            <p class="text-center font-bold px-4 flex-[3] w-full border-transparent border border-b-white pb-4">${
-              place.sta_nm
-            } 해수욕장</p>
+            <p class="text-center font-bold px-4 flex-[3] w-full border-transparent border border-b-white pb-4">${place.sta_nm} 해수욕장</p>
          
           <p><img class="rounded-full w-40 h-40" src="/beach${nb}.jpg" alt="" /></p>
           <a href=${
@@ -405,7 +436,8 @@ const KakaoMap = () => {
           } target="_blank" class="flex-[2] text-blue-400 hover:text-rose-400">해당 사이트로 이동</a>
           <p class="text-xs font-semibold text-rose-500 flex-1">가까운 보건소 전화번호</p>
           <p class="text-xs text-gray-400" class="flex-1">${place.link_tel || '전화번호 미등록 해수욕장입니다.'}</p>
-          
+          <p>
+          </p>
   
     <div class="border-b border-gray-200 ">
     <ul class="flex justify-center items-center -mb-px text-sm font-medium text-center">
@@ -475,20 +507,19 @@ const KakaoMap = () => {
 
       </div>
       </div>
-      <div id="tab4" class="overlay-content" >이돈이면 신라호텔 호캉스갑니다</div>
+      <div id="tab4" class="overlay-content" ><button id="review-button">후기 작성하러 가기</button></div>
     </div>
-
   </div>
           `;
         }
-        // filteredWaterQuality res1 , res2 , resYn
-        // filteredSandQuality res1 === 카드뮴, res2 === 비소, res3 === 수은, res4 === 납, res5 === 6가크롬, res_yn,
+      
         customInfo.current = new window.kakao.maps.CustomOverlay({
           content: iwContent,
           position: marker.getPosition(),
           xAnchor: 0.5,
-          yAnchor: 1,
+          yAnchor: 0.5,
         });
+      map.current.setCenter(marker.getPosition())
       customInfo.current.setMap(map.current)
         
       const overlayCloseButton = document.getElementById('cb')
@@ -496,8 +527,12 @@ const KakaoMap = () => {
       
       const overlayTabsList = document.querySelectorAll('.overlay-tabs--list');
       const overlayTabsContent = document.querySelectorAll('.overlay-content')
+      const goToReviewButton = document.getElementById('review-button');
 
-      
+      goToReviewButton?.addEventListener('click',() => {
+        console.log('excuted')
+        location.href = `${LOCAL_URL}/beaches/${place.sta_nm}`
+      })
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
           const tabTarget = item.currentTarget;
@@ -512,8 +547,10 @@ const KakaoMap = () => {
           tabTarget.classList.add("active")
         });
        })
+       
+       setIsLoading(false)
       })
-      setIsLoading(false)
+     
   };
   
 
@@ -565,12 +602,13 @@ const KakaoMap = () => {
     
     setIsGeneralSearch(false);
     setIsOceansBeachSearch(true);
-    setIsLoading(true)
+    
     try {
       const response = await axios.get(
         `https://www.meis.go.kr/service/OceansBeachInfoService/getOceansBeachInfo?pageNo=${currentPage}&numOfRows=15&resultType=json&SIDO_NM=${sido}&ServiceKey=MyXj6g1gpARPPgQt0O5yc8MpM%2FArBXMg6GONzjmVoZoIfS4dXMP3ydfWn6IASEBNUXHxiVj9KpOidOwoSWFpBw%3D%3D&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`
       );
-
+      
+     
       for (let i = 0; i < placeMarkers.length; i++) {
         placeMarkers[i].setMap(null);
       }
@@ -639,11 +677,12 @@ const KakaoMap = () => {
     } catch (error) {
       console.error(error);
     }
-    setIsLoading(false)
+
   };
 
   return (
     <>
+    
       <ul className="flex flex-row justify-between items-center gap-2 py-2 border w-[90%] mx-auto p-4 bg-sky-400 rounded-tl-lg rounded-tr-lg bg-opacity-60">
         
         {SIDO_NM_ARRAY.map((sido) => (
@@ -659,8 +698,9 @@ const KakaoMap = () => {
         
       </ul>
       <div className='relative'>
-      {isLoading && <div className='absolute z-20 left-[45%] top-[20%]'>검색중입니다...</div>}
-      </div>
+      {isLoading &&
+        <InfowindowSkeleton />}
+          
       <div className="relative w-[90%] h-[600px] mx-auto z-0">
         <div className="">
           <div ref={mapRef} className="w-[100%] h-[580px] mx-auto "></div>
@@ -668,14 +708,20 @@ const KakaoMap = () => {
           <div id="menu_wrap" className="">
             <div className="option ">
               <form onSubmit={submitHandler} autoComplete="off" >
-                지역명으로 검색해주세요!
+                
+                <div className='bg-slate-200 rounded-t-lg py-4'>
+                <h3 className="font-bold text-[14px]">오늘의 날씨 확인하기<span className='text-xs'>(최대 3일)</span></h3>
+                <p className='font-bold text-rose-500'>지역명으로 검색해주세요!<span className='text-[8px]'>(구,군,동,리)</span></p>
+                
                 <input
-                  className="w-full border border-teal-400 h-8"
+                  className="w-[90%] border border-teal-400 h-8"
                   type="text"
                   value={keywordValue}
                   id="keyword"
                   onChange={keywordChangeHandler}
                 />
+                </div>
+
                 <button
                   type="submit"
                   className="py-2 w-full hover:bg-orange-500 hover:text-white transition-all duration-200"
@@ -770,7 +816,7 @@ const KakaoMap = () => {
               </div>
             </div>
           </div>
-        
+          </div>
         </div>
  
         <div className=" mt-2">
