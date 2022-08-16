@@ -76,7 +76,8 @@ const BeachPost = () => {
         lating: myLating,
         postImage: null,
         timestamp: serverTimestamp(),
-        pid: ''
+        pid: '',
+        uid:userState.userData.uid
       })
       const imagesArr:string[] = [];
       await selectedImage.map((image,index) => {
