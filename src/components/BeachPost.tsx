@@ -62,7 +62,6 @@ const BeachPost = () => {
     setBody(e.currentTarget.value)
   }
   const deleteSelectedImageHandler = (currentImage:string) => {
-    console.log('sdfs')
     setSelectedImage((prev) => prev.filter((item) => item !== currentImage ))
   }
   const submitPostHandler = async () => {
@@ -79,6 +78,9 @@ const BeachPost = () => {
         pid: '',
         uid:userState.userData.uid
       })
+      await updateDoc(doc(db,'beaches',beachId,'posts',docRef.id),{
+        pid:docRef.id
+      })
       const imagesArr:string[] = [];
       await selectedImage.map((image,index) => {
         const imageRef = ref(storage, `beaches/${docRef.id}/image${index}`)
@@ -87,7 +89,6 @@ const BeachPost = () => {
           imagesArr.push(downloadURL);
           await updateDoc(doc(db,'beaches',beachId,'posts',docRef.id),{
             postImage: imagesArr,
-            pid: docRef.id
           })
         })
       })
@@ -100,15 +101,14 @@ const BeachPost = () => {
       setSelectedImage([]);
     }
   }
-  console.log(selectedImage.length);
-  console.log(beachId);
+
   return (
     <div className='w-96 h-fit z-20 bg-white border-slate-400 rounded-lg box-border border shadow-md shadow-slate-400 p-1'>
       <label htmlFor="" ><span className='font-bold text-xs pl-1'>제목</span>
       <input
       type="text"
-      max={15}
-      placeholder="제목은 15자 이내로 작성해주세요"
+      maxLength={20}
+      placeholder="제목은 20자 이내로 작성해주세요"
       className='border bg-slate-200 w-full p-2 rounded-t-lg placeholder:text-slate-700 font-bold text-xs focus:outline-teal-200'
       onChange={titleChangeHandler}/>
       </label>
@@ -137,9 +137,6 @@ const BeachPost = () => {
         </div>
         </Slider>
         </CarouselProvider>}
-        
-
-
         {/* Rating */}
       <div className='mx-auto text-center mt-8'>
         <div className='flex justify-center items-center'>
@@ -153,11 +150,11 @@ const BeachPost = () => {
         filledIcon={<FontAwesomeIcon icon={faStar} />}
         activeColor="#ffd700" />
         </div>
-        {myLating && <span className='font-bold text-xs text-rose-400'>{!myLating.toString().split('.')[1] ? myLating + '.0 점' : myLating + '점'}</span>}
+        {myLating && <div>
+          <span className='font-bold text-xs text-rose-400'>{!myLating.toString().split('.')[1] ? myLating + '.0 점' : myLating + '점'}</span>
+          <p className='font-bold text-xs text-rose-400'> * 평가한 별점은 이후 수정할 수 없습니다.</p>
+          </div>}
       </div>
-
-
-
 
       <label htmlFor="" className='bottom-0 w-full flex flex-col justify-center items-center'>
         <span className='w-full font-bold text-xs pl-1 text-left'>본문</span>

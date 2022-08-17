@@ -3,12 +3,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { userReducer } from './slices/UserSlice'
 import { PersistConfig,persistReducer,persistStore,FLUSH,REHYDRATE,PAUSE,PERSIST,PURGE,REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { commentsReducer } from './slices/CommentsSlice';
 
 
 
 
 export const rootReducer = combineReducers({
   user:userReducer,
+  comments:commentsReducer
 })
 
 const persistConfig = {
