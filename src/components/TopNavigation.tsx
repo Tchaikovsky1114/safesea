@@ -18,10 +18,10 @@ interface TopNavigationProps {
 const TopNavigation = ({modalHandler}:TopNavigationProps) => {
   const userState = useAppSelector((state) => state.user)
 
-
+  console.log(userState.userData.userImage)
   return (
     <>
-
+  
     <nav className=" flex justify-between items-center shadow-md h-16">
     <div className="p-10"><Link to="/"><img src="/logo.png" alt="logo" className='w-16' /></Link></div>
     <div className="w-32">

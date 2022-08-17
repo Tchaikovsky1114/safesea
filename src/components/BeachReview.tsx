@@ -3,20 +3,15 @@ import dayjs from 'dayjs';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { faComment, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { faComments, faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
+import { faComment, faStar, faHeart as faFillHeart } from '@fortawesome/free-solid-svg-icons';
+import { faComments, faHeart, faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
 import ReactStars from 'react-rating-stars-component'
 import { addDoc, collection, deleteDoc, doc, DocumentData, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../../firebase';
-import { CarouselProvider, Slide, Slider } from 'pure-react-carousel';
+
 import BeachUpdateReview from './BeachUpdateReview';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { fetchComments } from '../store/slices/CommentsSlice';
-// import relativeTime from 'dayjs/plugin/relativeTime'
-// import 'dayjs/locale/ko'
-
-
-
+import { fetchCommentLikes, fetchComments } from '../store/slices/CommentsSlice';
 
 interface CustomLocationState {
   state : {
@@ -52,7 +47,7 @@ const BeachReview = () => {
   const [updateImage,setUpdateImage] = useState<string[]>(data.postImage);
   const [comment,setComment] = useState('')
   const [comments,setComments] = useState<DocumentData[]>([]);
-  
+  const [likeTargetComment,setLikeTargetComment] = useState<DocumentData[]>([]);
   const deletePostHandler = async () => {
     if(!beachId) return;
     await deleteDoc(doc(db,'beaches',beachId,'posts',data.pid))
@@ -114,11 +109,26 @@ const BeachReview = () => {
       username: userState.userData.username,
       userImage: userState.userData.userImage,
       beachId,
-      pid: data.pid
+      pid: data.pid,
+      email:userState.userData.email
     }))
     setComment('');
   }
 
+  const commentLikeHandler = (cid:string,type:string) => {
+    if(!beachId) return;
+    dispatch(fetchCommentLikes({
+      beachId,
+      pid: data.pid,
+      cid: cid,
+      email: userState.userData.email,
+      type
+    }))
+  }
+
+
+
+  
   useEffect(() => {
     if(!beachId) return
     const unsubscribe = onSnapshot(
@@ -127,11 +137,17 @@ const BeachReview = () => {
         orderBy('timestamp','desc')
       ),
       (snapshot) => {
+        
         setComments(snapshot.docs);
+      },
+      (error) => {
+        console.error(error);
       }
     )
     return () => unsubscribe();
   }, [])
+  
+  
   return (
   
     <div
@@ -189,16 +205,36 @@ const BeachReview = () => {
 
 
 
-              {/* 댓글 UI 개선 필요 */}
+              {/* 댓글 UI 개선 필요 - like 기능, timestamp, userImage, username */}
         <div className='w-full h-[200px] my-6'>  
           <p className='w-full border-b border-slate-700 pb-2'><FontAwesomeIcon icon={faComments} /> 댓글</p>
-          {comments.map((item,index) => <div key={item.data().pid + index}>{item.data().comment}</div>) }
+          {comments.map((item,index) => <div key={item.data().cid + index}>
+            <div className='flex justify-center items-start flex-col border border-slate-400 my-1 mx-4'>
+
+            <div className='flex items-center justify-between py-1 bg-slate-200 w-full px-2'>
+              <div className='flex items-center justify-start py-1 bg-slate-200'>
+            <span className="text-xs">{item.data().username}</span>
+            <img className='w-4 h-4 rounded-full' src={item.data().userImage} alt={item.data().username} />
+            </div>
+            <div>
+            {!item.data().likes.includes(userState.userData.email) && <FontAwesomeIcon icon={faHeart} onClick={() =>commentLikeHandler(item.data().cid,'ADD')} />}
+            {item.data().likes.includes(userState.userData.email) && <FontAwesomeIcon icon={faFillHeart} color="red" onClick={() =>commentLikeHandler(item.data().cid,'REMOVE')} />}
+
+            <span className='text-xs pl-1'>{item.data().likes.length}</span>
+            </div>
+            </div>
+            
+            <div className=' flex items-center justify-between h-10 w-full pl-2'>
+            <p className='flex-1'><span className="text-xs">{item.data().comment}</span></p>
+            <div className='text-xs flex gap-1 mr-1'>
+            <button className='w-8 h-fit bg-slate-400 text-white py-1 rounded-lg'>수정</button>
+            <button className='w-8 h-fit bg-slate-400 text-white py-1 rounded-lg'>삭제</button>
+            </div>
+            </div>
+
+            </div>
+            </div>)}
         </div>
-
-
-
-
-
 
         <div className='relative p-4 border bg-slate-100 my-2 rounded-md'>
         <div className='flex justify-between py-1'>

@@ -101,8 +101,7 @@ const BeachItem = () => {
     fetchRating()
   },[])
 
-  
-  console.log(latingAverage);
+ 
   return (
     
       <div className='bg-sky-100 w-full h-screen'>
