@@ -24,7 +24,7 @@ import GeneralPagination from './kakaomap/GeneralPagination';
 import BeachItem from './kakaomap/BeachMarkers'
 import BeachPagination from './kakaomap/BeachPagination';
 import MapAddOns from './kakaomap/MapAddOns';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 declare global {
   interface Window {
     kakao: any;
@@ -531,11 +531,14 @@ const KakaoMap = () => {
       const goToReviewButton = document.getElementById('review-button');
 
       goToReviewButton?.addEventListener('click',() => {
-        console.log('excuted')
+        
         const linkEl = document.getElementById('links')
         linkEl?.setAttribute('to',`/beaches/${place.sta_nm}`)
-        // @ts-ignored
-        document.getElementById('links')[0].click()
+        linkRef.current.click()
+        document.getElementById('links')!.onclick = function() {
+          console.log('excuted!')
+          moveBeaches(place.sta_nm)
+        }
         
         // location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
       })
@@ -556,13 +559,12 @@ const KakaoMap = () => {
        })
        
        setIsLoading(false)
-      })
-     
+      }) 
   };
-  
-
-
-  
+  const navigate = useNavigate()
+  function moveBeaches(sido:string){
+    navigate(`/beaches/${sido}`)
+  }
   useEffect(() => {
     const script = document.createElement('script');
     script.src =
