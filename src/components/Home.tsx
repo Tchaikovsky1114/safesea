@@ -11,20 +11,18 @@ const Home = () => {
   console.log(userSelector.userData.username);
   
   return (
-    <>
+    <div className='container mx-auto'>
 
       <Banner />
       <main className="grid grid-cols-2 h-[700px]">
         
         <section className="col-span-2 text-center border p-4 bg-slate-100 ">
-        <div className="w-full h-[500px] text-center">
+
         <KakaoMap />
-        </div>
-        
         </section>
 
       </main>
-    </>
+    </div>
   );
 };
 

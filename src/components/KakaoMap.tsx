@@ -21,7 +21,7 @@ import RegionNavigation from './kakaomap/RegionNavigation';
 import PlacesItem from './kakaomap/PlacesItem';
 import SearchForm from './kakaomap/SearchForm';
 import GeneralPagination from './kakaomap/GeneralPagination';
-import BeachItem from './kakaomap/BeachItem'
+import BeachItem from './kakaomap/BeachMarkers'
 import BeachPagination from './kakaomap/BeachPagination';
 import MapAddOns from './kakaomap/MapAddOns';
 declare global {
@@ -680,24 +680,24 @@ const KakaoMap = () => {
   return (
     <>
     
-      <ul className="flex flex-row justify-between items-center gap-2 py-2 border w-[90%] mx-auto p-4 bg-sky-400 rounded-tl-lg rounded-tr-lg bg-opacity-60">
+      <ul className="w-full container flex flex-wrap md:flex-nowrap flex-row md:justify-between md:items-center gap-2 py-2 md:border mx-auto p-4a md:bg-sky-400 md:rounded-tl-lg md:rounded-tr-lg bg-opacity-60">
         <RegionNavigation sidoClickHandler ={sidoClickHandler} />
       </ul>
       <div className='relative'>
       {isLoading &&<InfowindowSkeleton />}
           
-      <div className="relative w-[90%] h-[600px] mx-auto z-0">
+      <div className="relative h-[600px] mx-auto z-0">
         <div className="">
-          <div ref={mapRef} className="w-[100%] h-[580px] mx-auto "></div>
-          
-          <div id="menu_wrap" className="">
-            <div className="option ">
+          <div ref={mapRef} className="h-[580px] mx-auto mt-60 xs:mt-0"></div>
+          {/* position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px; */}
+          <div id="menu_wrap" className=" -top-60 xs:top-0 w-full xs:w-[240px] h-[200px] xs:h-[90%] xs:bg-opacity-60 bg-white absolute inset-0 mt-[10px] mb-[30px] xs:ml-[10px] p-[5px] overflow-y-auto z-10 text-[12px] border rounded-lg">
+            <div className="option md:relative ">
               <SearchForm submitHandler={submitHandler} keywordValue={keywordValue} keywordChangeHandler={keywordChangeHandler} />
 
               {/* placesList - 검색결과 목록 */}
               {isGeneralSearch && (
                 <>
-                  <ul id="placesList">
+                  <ul id="placesList" className=''>
                     {places.map((place: any, index: number) => (<PlacesItem key={'markerbg marker_' + index + 1} index={index} place={place} />))}
                   </ul>
                   <div id="pagination">
@@ -730,11 +730,14 @@ const KakaoMap = () => {
                       }
               </div>
             </div>
+
+
+
           </div>
           </div>
         </div>
  
-        <div className=" mt-2">
+        <div className="mt-2 flex justify-center items-center">
          <MapAddOns map={map} />
         </div>
         <div>

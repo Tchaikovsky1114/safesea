@@ -30,8 +30,10 @@ useEffect(() => {
   
   return (
     <>
-    <div className="w-[90%] mx-auto h-64 max-h-64 text-5xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-4 mt-12 font-bold leading-[80px] rounded-lg">
-      <span ref={textRef}></span>{!blinkOut && <span className='text-5xl inline-block align-baseline animate-blink '>|</span>}
+    <div className='container mx-auto'>
+    <div className=" h-44 md:h-64 max-h-64 text-2xl md:text-5xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-4 mt-12 font-bold leading-[40px] md:leading-[80px] md:rounded-lg">
+      <span ref={textRef}></span>{!blinkOut && <span className='text-2xl md:text-5xl inline-block align-baseline animate-blink '>|</span>}
+    </div>
     </div>
     </>
   );

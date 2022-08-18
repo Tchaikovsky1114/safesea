@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
   content: [
     './index.html',
@@ -20,8 +21,15 @@ module.exports = {
             "transform": "translateX(100%)"
           }
         }
+      },
+      container: {
+        center: true,
       }
     },
+    screens: {
+      'xs' : '364px',
+      ...defaultTheme.screens
+    }
   },
   plugins: [
     require('tailwind-scrollbar')

@@ -40,10 +40,10 @@ const BeachUpdateReview = ({updateImage,setUpdateImage}:BeachUpdateReviewProps) 
     }
   }
   const deleteUpdateImageHandler = (currentImage:number) => {
-    const test = updateImage.slice()
-    test.splice(currentImage, 1)
-    console.log(test)
-    setUpdateImage(test)
+    const selectImage = updateImage.slice()
+    selectImage.splice(currentImage, 1)
+    console.log(selectImage)
+    setUpdateImage(selectImage)
   }
   const imagePickerHandler = () => {
     imagePickerRef.current!.click();
@@ -59,7 +59,7 @@ const BeachUpdateReview = ({updateImage,setUpdateImage}:BeachUpdateReviewProps) 
       </div>
 
         {/* carousel */}
-       {updateImage.length > 0 && <CarouselProvider className="overflow-hidden relative" naturalSlideWidth={400} naturalSlideHeight={400} totalSlides={updateImage.length} orientation="horizontal">
+       {updateImage && updateImage.length > 0 && <CarouselProvider className="overflow-hidden relative" naturalSlideWidth={400} naturalSlideHeight={400} totalSlides={updateImage.length} orientation="horizontal">
         <div className='px-1 text-xs text-rose-400/60'>* 드래그로 사진들을 넘길 수 있어요</div>
         <Slider >
         <div className='flex flex-row h-[230px]'>

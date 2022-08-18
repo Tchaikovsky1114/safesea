@@ -103,7 +103,7 @@ const BeachPost = () => {
   }
 
   return (
-    <div className='w-96 h-fit z-20 bg-white border-slate-400 rounded-lg box-border border shadow-md shadow-slate-400 p-1'>
+    <div className='w-[300px] xs:w-96 xs:h-fit z-20 bg-white border-slate-400 rounded-lg box-border border shadow-md shadow-slate-400 p-1'>
       <label htmlFor="" ><span className='font-bold text-xs pl-1'>제목</span>
       <input
       type="text"

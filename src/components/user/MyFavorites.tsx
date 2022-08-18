@@ -43,11 +43,11 @@ const MyFavorites = () => {
   
   
   return (
-    <div className='ml-4'>
+    <div className='mx-auto px-4 w-full'>
     <h2 className='mt-20 mb-4 font-bold w-full border-b-2 border-slate-200 pb-2'>내가 좋아하는 해변 </h2>
-    <div className='flex'>
+    <div className='flex flex-col gap-4 md:flex-row md:flex-wrap'>
       {myFavoriteBeaches.map((beach:BeachTypes,index:number) =>
-      <ul className='mr-4 border p-8 bg-sky-100 rounded-md' key={beach.data().sta_nm}>
+      <ul className='border p-8 bg-sky-100 rounded-md mx-auto md:min-w-[360px] w-full' key={beach.data().sta_nm}>
       <Link className='text-sm font-bold flex flex-col justify-center space-y-4' to={`/beaches/${beach.data().sta_nm}`}><li className='text-center'>{beach.data().sta_nm} 해수욕장</li>
       <li><img className='w-24 h-24 rounded-full mx-auto' src={`/beach${index + 1}.jpg`} alt=""/></li>
       <li className='text-center text-sm py-2'>{beach.data().sido_nm} {beach.data().gugun_nm ? beach.data().gugun_nm : "정보 없음"}</li>

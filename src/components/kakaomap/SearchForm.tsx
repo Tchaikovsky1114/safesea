@@ -12,7 +12,7 @@ const SearchForm = ({
   keywordChangeHandler,
 }: SearchFormProps) => {
   return (
-    <form onSubmit={submitHandler} autoComplete="off">
+    <form className=' md:relative' onSubmit={submitHandler} autoComplete="off">
       <div className="bg-slate-200 rounded-t-lg py-4">
         <h3 className="font-bold text-[14px]">
           오늘의 날씨 확인하기<span className="text-xs">(최대 3일)</span>
@@ -33,7 +33,7 @@ const SearchForm = ({
 
       <button
         type="submit"
-        className="py-2 w-full hover:bg-orange-500 hover:text-white transition-all duration-200"
+        className="border bg-purple-600 xs:bg-transparent text-white xs:text-black font-bold text-base xs:border-none mt-1 xs:mt-0 py-2 w-full hover:bg-orange-500 hover:text-white transition-all duration-200"
       >
         검색하기
       </button>

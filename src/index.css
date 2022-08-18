@@ -5,7 +5,7 @@
 
 @layer components{
   body{
-    @apply bg-gray-200 bg-opacity-20
+    @apply bg-gray-200 bg-opacity-20 container mx-auto
   }
   [aria-current="page"] {
     @apply text-purple-600 rounded-t-lg border-b-2 border-purple-600
@@ -16,4 +16,8 @@ img {
   transform: translateZ(0);
   backface-visibility: hidden;
   
+}
+
+#root{
+  margin: 0 auto;
 }

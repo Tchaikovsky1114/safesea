@@ -15,7 +15,7 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
     <div className='mt-24'>
     <h2 className='font-bold text-lg text-center'>오늘의 {geoSearchValue} 날씨는?</h2>  
     <div className="relative">
-    <div className='mx-auto flex flex-wrap sm:flex-nowrap flex-row justify-center items-center gap-2 border border-gray-300 shadow-xl rounded-full sm:rounded-3xl px-4 py-8 my-8 bg-slate-300 relative '>
+    <div className='mx-auto flex flex-wrap sm:flex-nowrap flex-row justify-start items-center gap-2 border border-gray-300 shadow-xl rounded-full sm:rounded-3xl px-4 py-8 my-8 bg-slate-300 relative '>
       {minMaxTemp.map((item,i) => (
       <div key={item.baseDate + item.fcstTime + item.category + i + "weather"} className=" border rounded-full bg-white max-w-fit min-w-[80px] p-4 sm:min-w-[100px] sm:min-h-[100px] mx-auto ">
         <p className='w-full text-[10px] sm:text-xs font-bold pt-2 rounded-full break-normal '>{item.fcstDate.substr(4,1) === "0" ? item.fcstDate.substr(5,1) : item.fcstDate.substr(4,2)}월 {item.fcstDate.substr(6,1) === "0" ? item.fcstDate.substr(7,1) : item.fcstDate.substr(6,2)}일</p>

@@ -112,7 +112,7 @@ const BeachItem = () => {
     
       <div className='bg-sky-100 w-full h-full min-h-screen'>
       <div className='text-center pt-4 font-bold text-2xl flex items-center justify-center relative'>
-        <span className='block flex-1'>{beachId} 해수욕장</span>
+        <span className='block flex-1 '>{beachId} 해수욕장</span>
         {latingAverage ?
         <div className='absolute right-4'>
         <ReactStars
@@ -128,7 +128,7 @@ const BeachItem = () => {
         />
         </div>
         :
-        <div className='absolute text-xs font-bold border p-2 right-2'>
+        <div className='absolute text-xs font-bold border p-2 right-2 hidden md:block'>
         <h3>등록된 후기가 없습니다.</h3>
         <p>첫 후기를 작성하시면 평균 평점이 등록됩니다!</p>
         </div>
@@ -147,15 +147,15 @@ const BeachItem = () => {
       <Link to={`post`}
       className='border border-transparent w-24 py-1 mb-2 font-bold bg-rose-400 text-white hover:bg-rose-400/80 text-center mr-2 rounded-lg'>글쓰기</Link>
       </div>
-      <h3 className="font-bold text-center text-rose-500 py-4 mt-4">{beachId}해수욕장에서 느낀 생생한 후기를 남겨주세요!</h3>
-      <ul className=' border-t-2 border-t-gray-200 px-4'>
+      <h3 className="text-xs md:text-lg font-bold text-center text-rose-500 py-4 mt-4">{beachId}해수욕장에서 느낀 생생한 후기를 남겨주세요!</h3>
+      <ul className=' border-t-2 border-t-gray-200 px-4 pb-10'>
       <li className='w-full'>
         <div className='flex flex-row justify-between items-center py-2 mr-2 border-b border-b-slate-300 w-full'>
-          <div className="flex-[1.2] text-center text-xs font-bold">글 번호</div>
-          <div className="flex-[6.5] text-xs font-bold">제목 </div>
-          <div className="flex-[1.3] text-xs font-bold">작성자</div>
-          <div className="flex-[1.2] text-xs font-bold">작성일</div>
-          <div className="flex-[0.6] text-xs font-bold">평점</div>
+          <div className="md:flex-[1.2] text-center text-xs font-bold hidden md:block">글 번호</div>
+          <div className="flex-[4] md:flex-[6.5] text-xs font-bold">제목 </div>
+          <div className="flex-[1.3] md:flex-[1.3] text-xs font-bold">작성자</div>
+          <div className="flex-[1.2] md:flex-[1.2] text-xs font-bold">작성일</div>
+          <div className="flex-[0.6] md:flex-[0.6] text-xs font-bold">평점</div>
         </div>
       </li>
       {beachReview.map((review:any,index:number) =>
@@ -168,12 +168,12 @@ const BeachItem = () => {
           }}
         >
         <div className='flex flex-row justify-between gap-2 items-baseline'>
-          <div className="flex-[1.2] text-center">{beachReview.length - index}</div>
+          <div className="md:flex-[1.2] text-center hidden md:block">{beachReview.length - index}</div>
           {/*  */}
-          <div className='flex-[6.5]'>{review.data().title}</div>
-          <div className="flex-[1.2] text-xs">{review.data().username}</div>
-          <div className="flex-[1.2] text-xs">{dayjs.unix(review.data().timestamp?.seconds).fromNow()}</div>
-          <div className="flex-[0.6] text-xs ">{!review.data().lating.toString().split('.')[1] ? review.data().lating + '.0' : review.data().lating}</div>
+          <div className='flex-[4] md:flex-[6.5] md:text-xs truncate'>{review.data().title}</div>
+          <div className="flex-[1.2] ml-3 text-xs text-[10px] md:flex-[1.2] md:text-xs truncate">{review.data().username}</div>
+          <div className="flex-[1.2] text-[10px] md:flex-[1.2] md:text-xs">{dayjs.unix(review.data().timestamp?.seconds).fromNow()}</div>
+          <div className="flex-[0.6] text-[10px] md:flex-[0.6] md:text-xs ">{!review.data().lating.toString().split('.')[1] ? review.data().lating + '.0' : review.data().lating}</div>
         </div>
           </Link>
           </li>) )}

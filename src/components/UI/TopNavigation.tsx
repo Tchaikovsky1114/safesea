@@ -22,7 +22,7 @@ const TopNavigation = ({modalHandler}:TopNavigationProps) => {
   return (
     <>
   
-    <nav className=" flex justify-between items-center shadow-md h-16">
+    <nav className=" flex justify-between items-center shadow-md h-20 w-full">
     <div className="p-10"><Link to="/"><img src="/logo.png" alt="logo" className='w-16' /></Link></div>
     <div className="w-32">
       {!userState.userData.uid && <Link to="/auth">signup/in</Link>}

@@ -47,7 +47,7 @@ const BeachReview = () => {
   const [updateImage,setUpdateImage] = useState<string[]>(data.postImage);
   const [comment,setComment] = useState('')
   const [comments,setComments] = useState<DocumentData[]>([]);
-  const [likeTargetComment,setLikeTargetComment] = useState<DocumentData[]>([]);
+  
   const deletePostHandler = async () => {
     if(!beachId) return;
     await deleteDoc(doc(db,'beaches',beachId,'posts',data.pid))
@@ -74,7 +74,11 @@ const BeachReview = () => {
         title:updateTitleValue,
       })
       const imageArr:string[] = [];
-      
+      if(updateImage.length === 0){
+        await updateDoc(doc(db,'beaches',beachId,'posts',data.pid), {
+          postImage: []
+        })
+      }
       await updateImage.map((image,index) => {
         if(!image.includes("https://")){
           const imageRef = ref(storage, `beaches/${docRef.id}/image${index}`)
@@ -126,7 +130,7 @@ const BeachReview = () => {
     }))
   }
 
-
+  console.log(updateImage);
 
   
   useEffect(() => {
@@ -151,13 +155,14 @@ const BeachReview = () => {
   return (
   
     <div
-    className='absolute w-[550px] h-[600px] -translate-x-1/2 -translate-y-1/2 mx-auto bg-white z-30 top-1/2 rounded-lg p-2 border-2 border-indigo-400 overflow-y-scroll shadow-xl shadow-blue-700-200'>
+    className='absolute w-[320px] top-60 xs:w-[550px] xs:h-[600px] -translate-x-1/2 -translate-y-1/2 mx-auto bg-white z-30 xs:top-1/2 rounded-lg p-2 border-2 border-indigo-400 overflow-y-scroll shadow-xl shadow-blue-700-200'>
       <div className='w-full h-fit mx-auto'>
       <div className='flex justify-between items-center py-2 border-b-2 bg-gray-400 px-4 border-y-2 border-y-slate-700 text-gray-100 mt-2'>
-        {!editMode && <p>{data.title}</p>}
+        {!editMode && <p className='text-sm '>{data.title}</p>}
         {editMode && <input className='text-sm text-black w-full bg-indigo-100' onChange={updateTitleHandler} maxLength={20} value={updateTitleValue} />}
         
-        {!editMode && <p className="text-sm"><span className="font-bold">작성자:</span> <span className="">{data.username}</span></p>}
+        {!editMode && <p className="text-sm"><span className="text-xs xs:text-sm xs:font-bold">작성자:{' '}</span>
+        <span className="text-xs xs:text-sm">{data.username}</span></p>}
         </div>
         <div className="flex flex-row justify-between border-b border-slate-400/50">
         <div className='text-right w-full py-2'><span className="text-xs">{postTime} 작성</span></div>
