@@ -507,7 +507,7 @@ const KakaoMap = () => {
       </div>
       </div>
       <div id="tab4" class="overlay-content" >
-      <a href="/beaches/${encodeURIComponent(place.sta_nm)}" class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</a></div>
+      <a href="/beaches/${place.sta_nm}" class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</a></div>
     </div>
   </div>
           `;
