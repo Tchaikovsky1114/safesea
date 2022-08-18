@@ -1,11 +1,11 @@
 import { HeartIcon } from '@heroicons/react/outline';
 import { HeartIcon as FullHeartIcon } from '@heroicons/react/solid';
 import dayjs from 'dayjs';
-import { collection, deleteDoc, doc, DocumentData, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, startAfter } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, startAfter, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
-import { db } from '../../firebase';
-import { useAppSelector } from '../store/store';
+import { db } from '../../../firebase';
+import { useAppSelector } from '../../store/store';
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/ko'
 import ReactStars from 'react-rating-stars-component'
@@ -34,10 +34,16 @@ const BeachItem = () => {
 
     if(like){
       await deleteDoc(doc(db,'beaches',beachId,'likes',userState.userData.username))
+      await updateDoc(doc(db,'beaches',beachId),{
+        likes:arrayRemove(userState.userData.email)
+      })
     }else{
       await setDoc(doc(db,'beaches',beachId,'likes',userState.userData.username),{
         username: userState.userData.username
       })
+      await updateDoc(doc(db,'beaches',beachId),{
+        likes:arrayUnion(userState.userData.email)
+      }) 
     }
   }
   useEffect(() => {
@@ -104,7 +110,7 @@ const BeachItem = () => {
  
   return (
     
-      <div className='bg-sky-100 w-full h-screen'>
+      <div className='bg-sky-100 w-full h-full min-h-screen'>
       <div className='text-center pt-4 font-bold text-2xl flex items-center justify-center relative'>
         <span className='block flex-1'>{beachId} 해수욕장</span>
         {latingAverage ?
@@ -122,7 +128,7 @@ const BeachItem = () => {
         />
         </div>
         :
-        <div className='text-xs font-bold border p-2'>
+        <div className='absolute text-xs font-bold border p-2 right-2'>
         <h3>등록된 후기가 없습니다.</h3>
         <p>첫 후기를 작성하시면 평균 평점이 등록됩니다!</p>
         </div>

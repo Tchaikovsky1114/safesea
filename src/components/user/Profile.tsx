@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updateUserProfileImageHandler, updateUserProfileNameHandler } from '../store/slices/UserSlice';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { updateUserProfileImageHandler, updateUserProfileNameHandler } from '../../store/slices/UserSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 const Profile = () => {
   const userState = useAppSelector((state) => state.user);

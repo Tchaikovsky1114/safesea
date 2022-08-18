@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInFacebookHandler, signInGoogleHandler } from '../store/slices/UserSlice';
 import { useAppDispatch } from '../store/store';
-import NaverLogin from './NaverLogin';
+import NaverLogin from './login/NaverLogin';
 
 const Auth = () => {
 

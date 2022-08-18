@@ -6,8 +6,8 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { CarouselProvider, Slide, Slider } from 'pure-react-carousel';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { db, storage } from '../../firebase';
-import { useAppSelector } from '../store/store';
+import { db, storage } from '../../../firebase';
+import { useAppSelector } from '../../store/store';
 import ReactStars from 'react-rating-stars-component'
 import {faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
 

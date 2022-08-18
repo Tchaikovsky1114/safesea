@@ -7,8 +7,8 @@ import ReactStars from 'react-rating-stars-component'
 import { useNavigate, useParams } from 'react-router-dom';
 import { CarouselProvider,Slider,Slide } from 'pure-react-carousel';
 import { addDoc, collection, doc, DocumentReference, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../../firebase';
-import { useAppSelector } from '../store/store';
+import { db, storage } from '../../../firebase';
+import { useAppSelector } from '../../store/store';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { FirebaseError } from 'firebase/app';
 

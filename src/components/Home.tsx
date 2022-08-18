@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../store/store';
-import Banner from './Banner';
+import Banner from './UI/Banner';
 import KakaoMap from './KakaoMap';
 
 

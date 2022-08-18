@@ -2,7 +2,7 @@ import {  signOut } from 'firebase/auth';
 import React, { useEffect, useRef } from 'react';
 import Modal from 'react-modal';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase';
+import { auth } from '../../../firebase';
 
 Modal.setAppElement('#top-modal');
 
@@ -53,7 +53,7 @@ const UserModal = ({ isModalOpen, modalHandler,setIsModalOpen }: UserModalProps)
       <ul className='w-full h-full flex flex-col justify-center items-center space-y-4 font-bold'>
       <li className='hover:text-white hover:bg-orange-500 transition-all duration-150 w-full text-center h-14 flex items-center justify-center'><Link to="/profile">My Profile</Link></li>
       <li className='hover:text-white hover:bg-orange-500 transition-all duration-150 w-full text-center h-14 flex items-center justify-center'><button>포스트 작성</button></li>
-      <li className='hover:text-white hover:bg-orange-500 transition-all duration-150 w-full text-center h-14 flex items-center justify-center'><button>My Favorite Beaches</button></li>
+      <li className='hover:text-white hover:bg-orange-500 transition-all duration-150 w-full text-center h-14 flex items-center justify-center'><Link to="/myfavorites">My Favorite Beaches</Link></li>
       <li className='hover:text-white hover:bg-orange-500 transition-all duration-150 w-full text-center h-14 flex items-center justify-center'><button onClick={signOutHandler}>로그아웃</button></li>
       </ul>
       <div className="bg-gray-200 w-full h-16 rounded-b-md relative">

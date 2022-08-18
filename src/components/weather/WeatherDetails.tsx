@@ -1,6 +1,6 @@
 import React from 'react';
-import useTime from '../hooks/useTime';
-import { WeatherDetailsTypes } from './KakaoMap';
+import useTime from '../../hooks/useTime';
+import { WeatherDetailsTypes } from '../KakaoMap';
 
 interface WeatherDetailsProps {
   forecastDate:string

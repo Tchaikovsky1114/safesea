@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import UserModal from './components/UserModal';
+import UserModal from './components/UI/UserModal';
 import Root from './routes/Root'
 
 function App() {

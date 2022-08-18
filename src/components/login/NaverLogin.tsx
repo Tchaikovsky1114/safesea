@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { signInNaverHandler } from '../store/slices/UserSlice';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { signInNaverHandler } from '../../store/slices/UserSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 
 declare global {
   interface Window {
@@ -20,10 +20,9 @@ interface UserInfoTypes {
 const NAVER_CLIENT_ID = '2Cyk7XU1d9tBv1Q8lYKN';
 
 const NaverLogin = () => {
-  const [userInfo, setUserInfo] = useState<UserInfoTypes>();
+ 
   const dispatch = useAppDispatch();
-  const location = useLocation();
-  const userSelector = useAppSelector((state) => state.user);
+ 
   const navigate = useNavigate();
   useEffect(() => {
     const { naver } = window;

@@ -2,16 +2,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { faComment, faStar, faHeart as faFillHeart } from '@fortawesome/free-solid-svg-icons';
 import { faComments, faHeart, faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
 import ReactStars from 'react-rating-stars-component'
 import { addDoc, collection, deleteDoc, doc, DocumentData, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../../firebase';
+import { db, storage } from '../../../firebase';
 
 import BeachUpdateReview from './BeachUpdateReview';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { fetchCommentLikes, fetchComments } from '../store/slices/CommentsSlice';
+import { fetchCommentLikes, fetchComments } from '../../store/slices/CommentsSlice';
 
 interface CustomLocationState {
   state : {

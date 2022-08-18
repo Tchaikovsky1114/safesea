@@ -11,12 +11,19 @@ import './KaKaoMap.css';
 import axios, { AxiosResponse } from 'axios';
 import useConvertLatLng, { RsTypes } from '../hooks/useConvertLatLng';
 import useTime from '../hooks/useTime';
-import Weather from './Weather';
-import WeatherDetails from './WeatherDetails';
+import Weather from './weather/Weather';
+import WeatherDetails from './weather/WeatherDetails';
 import {HeartIcon} from '@heroicons/react/outline'
-import InfowindowSkeleton from './InfowindowSkeleton';
+import InfowindowSkeleton from './UI/InfowindowSkeleton';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
+import RegionNavigation from './kakaomap/RegionNavigation';
+import PlacesItem from './kakaomap/PlacesItem';
+import SearchForm from './kakaomap/SearchForm';
+import GeneralPagination from './kakaomap/GeneralPagination';
+import BeachItem from './kakaomap/BeachItem'
+import BeachPagination from './kakaomap/BeachPagination';
+import MapAddOns from './kakaomap/MapAddOns';
 declare global {
   interface Window {
     kakao: any;
@@ -87,18 +94,7 @@ beach_img:null
 }
 const { kakao } = window;
 
-const SIDO_NM_ARRAY: string[] = [
-  '인천',
-  '강원',
-  '충남',
-  '경북',
-  '경남',
-  '전북',
-  '전남',
-  '울산',
-  '부산',
-  '제주',
-];
+
 
 const LOCAL_URL = 'http://localhost:5173'
 
@@ -685,22 +681,10 @@ const KakaoMap = () => {
     <>
     
       <ul className="flex flex-row justify-between items-center gap-2 py-2 border w-[90%] mx-auto p-4 bg-sky-400 rounded-tl-lg rounded-tr-lg bg-opacity-60">
-        
-        {SIDO_NM_ARRAY.map((sido) => (
-          <li key={sido}>
-            <button
-              className="border border-white px-2 text-xs font-bold py-1 hover:border hover:border-transparent hover:bg-orange-400 hover:text-white shadow-lg rounded-md"
-              onClick={() => sidoClickHandler(sido)}
-            >
-              {sido}
-            </button>
-          </li>
-        ))}
-        
+        <RegionNavigation sidoClickHandler ={sidoClickHandler} />
       </ul>
       <div className='relative'>
-      {isLoading &&
-        <InfowindowSkeleton />}
+      {isLoading &&<InfowindowSkeleton />}
           
       <div className="relative w-[90%] h-[600px] mx-auto z-0">
         <div className="">
@@ -708,72 +692,17 @@ const KakaoMap = () => {
           
           <div id="menu_wrap" className="">
             <div className="option ">
-              <form onSubmit={submitHandler} autoComplete="off" >
-                
-                <div className='bg-slate-200 rounded-t-lg py-4'>
-                <h3 className="font-bold text-[14px]">오늘의 날씨 확인하기<span className='text-xs'>(최대 3일)</span></h3>
-                <p className='font-bold text-rose-500'>지역명으로 검색해주세요!<span className='text-[8px]'>(구,군,동,리)</span></p>
-                
-                <input
-                  className="w-[90%] border border-teal-400 h-8"
-                  type="text"
-                  value={keywordValue}
-                  id="keyword"
-                  onChange={keywordChangeHandler}
-                />
-                </div>
-
-                <button
-                  type="submit"
-                  className="py-2 w-full hover:bg-orange-500 hover:text-white transition-all duration-200"
-                >
-                  검색하기
-                </button>
-              </form>
+              <SearchForm submitHandler={submitHandler} keywordValue={keywordValue} keywordChangeHandler={keywordChangeHandler} />
 
               {/* placesList - 검색결과 목록 */}
               {isGeneralSearch && (
                 <>
                   <ul id="placesList">
-                    {places.map((place: any, index: number) => (
-                      <li key={'markerbg marker_' + index + 1} className="item">
-                        <span
-                          className={'markerbg marker_' + (index + 1)}
-                        ></span>
-                        <div className="info">
-                          <h5>{place.place_name}</h5>
-                          {place.road_address_name ? (
-                            <>
-                              <span>{place.road_address_name}</span>
-                              <span className="jibun gray">
-                                {place.address_name}
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span>{place.address_name}</span>
-                            </>
-                          )}
-                          <span className="tel">{place.phone}</span>
-                        </div>
-                      </li>
-                    ))}
+                    {places.map((place: any, index: number) => (<PlacesItem key={'markerbg marker_' + index + 1} index={index} place={place} />))}
                   </ul>
                   <div id="pagination">
-                    {!isOceansBeachSearch && Array(paginationRef.current?.last)
-                      .fill(0)
-                      .map((_, index) => (
-                        <a key={index} href="#"
-                          onClick={() => {
-                            console.log(paginationRef.current)
-                            for (let i = 0; i < placeMarkers.length; i++) {
-                              placeMarkers[i].setMap(null);
-                            }
-                            paginationRef.current.gotoPage(index + 1);
-                          }}
-                        >
-                          {index + 1}
-                        </a>
+                    {!isOceansBeachSearch && Array(paginationRef.current?.last).fill(0).map((_, index) => (
+                        <GeneralPagination  key={index} index={index} placeMarkers={placeMarkers} paginationRef={paginationRef} />
                       ))}
                   </div>
                 </>
@@ -783,16 +712,7 @@ const KakaoMap = () => {
               {isOceansBeachSearch && (
                 <ul id="placesList">
                   {places.map((place: any, index: number) => (
-                    <li key={'markerbg marker_' + index + 1} className="item">
-                      <span className={'markerbg marker_' + (index + 1)}></span>
-                      <div className="info">
-                        <h5>{place.sta_nm} 해수욕장</h5>
-                        <span className="jibun gray">
-                          {place.sido_nm} {place.gugun_nm}
-                        </span>
-                        <span className="tel">{place.phone}</span>
-                      </div>
-                    </li>
+                   <BeachItem key={Math.random() + index} place={place} index={index} />
                   ))}
                 </ul>
               )}
@@ -805,13 +725,7 @@ const KakaoMap = () => {
                   Array(Math.ceil(oceansBeachTotalCount / 15))
                   .fill(0)
                   .map((_,index) => 
-                    <button
-                    key={index +'oceanbeach-pagination'}
-                    onClick ={() => sidoClickHandler(sido,index + 1)}
-                    className="focus:text-rose-500"
-                    >
-                      {index + 1}
-                    </button>
+                    <BeachPagination key={sido + index} sido={sido} index={index} sidoClickHandler={sidoClickHandler} />
                         )
                       }
               </div>
@@ -821,36 +735,7 @@ const KakaoMap = () => {
         </div>
  
         <div className=" mt-2">
-          <button
-            className="text-sm font-bold py-2 px-4 border border-slate-600 my-2 mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"
-            onClick={() => {
-              map.current.addOverlayMapTypeId(
-                window.kakao.maps.MapTypeId.TRAFFIC
-              );
-            }}
-          >
-            실시간 교통상황
-          </button>
-          <button
-            className="text-sm font-bold py-2 px-4 border border-slate-600 mt-2 mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"
-            onClick={() => {
-              map.current.addOverlayMapTypeId(
-                window.kakao.maps.MapTypeId.ROADMAP
-              );
-            }}
-          >
-            일반지도
-          </button>
-          <button
-            className="text-sm font-bold py-2 px-4 border border-slate-600 mt-2 mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"
-            onClick={() => {
-              map.current.addOverlayMapTypeId(
-                window.kakao.maps.MapTypeId.SKYVIEW
-              );
-            }}
-          >
-            스카이뷰
-          </button>
+         <MapAddOns map={map} />
         </div>
         <div>
           {geoSearchValue && !isOceansBeachSearch && (
