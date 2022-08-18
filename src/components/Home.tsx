@@ -12,7 +12,7 @@ const Home = () => {
   
   return (
     <div className='container mx-auto'>
-      <Link className='w-40 h-40 bg-rose-700' to="/beaches/해운대" />
+      <Link className='w-40 h-40 bg-rose-700' to="/beaches/해운대">해운대 test</Link>
       <Banner />
       <main className="grid grid-cols-2 h-[700px]">
         
