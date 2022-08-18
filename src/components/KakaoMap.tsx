@@ -531,7 +531,7 @@ const KakaoMap = () => {
 
       goToReviewButton?.addEventListener('click',() => {
         console.log('excuted')
-        location.href = `${DEPLOY_URL}/beaches/${encodeURI(place.sta_nm)}`;
+        location.href = `/beaches/${encodeURI(place.sta_nm)}`;
       })
 
        overlayTabsList.forEach((item) => {
