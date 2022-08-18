@@ -24,6 +24,7 @@ import GeneralPagination from './kakaomap/GeneralPagination';
 import BeachItem from './kakaomap/BeachMarkers'
 import BeachPagination from './kakaomap/BeachPagination';
 import MapAddOns from './kakaomap/MapAddOns';
+import { Link } from 'react-router-dom';
 declare global {
   interface Window {
     kakao: any;
@@ -507,7 +508,7 @@ const KakaoMap = () => {
       </div>
       </div>
       <div id="tab4" class="overlay-content" >
-      <a href="/beaches/${place.sta_nm}" class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</a></div>
+      <button class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</button></div>
     </div>
   </div>
           `;
@@ -527,12 +528,15 @@ const KakaoMap = () => {
       
       const overlayTabsList = document.querySelectorAll('.overlay-tabs--list');
       const overlayTabsContent = document.querySelectorAll('.overlay-content')
-      // const goToReviewButton = document.getElementById('review-button');
+      const goToReviewButton = document.getElementById('review-button');
 
-      // goToReviewButton?.addEventListener('click',() => {
-      //   console.log('excuted')
-      //   location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
-      // })
+      goToReviewButton?.addEventListener('click',() => {
+        console.log('excuted')
+        const linkEl = document.getElementById('links')
+        linkEl?.setAttribute('to',`/beaches/${place.sta_nm}`)
+        linkEl?.click()
+        // location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
+      })
 
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
@@ -689,7 +693,7 @@ const KakaoMap = () => {
       </ul>
       <div className='relative'>
       {isLoading &&<InfowindowSkeleton />}
-          
+      <Link id="links" to="" />
       <div className="relative h-[600px] mx-auto z-0">
         <div className="">
           <div ref={mapRef} className="h-[580px] mx-auto mt-60 xs:mt-0"></div>
