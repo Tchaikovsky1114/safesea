@@ -533,13 +533,10 @@ const KakaoMap = () => {
       goToReviewButton?.addEventListener('click',() => {
         console.log('excuted')
         const linkEl = document.getElementById('links')
-        
-        console.log(linkEl)
         linkEl?.setAttribute('to',`/beaches/${place.sta_nm}`)
-        linkEl?.removeAttribute('href')
-        document.getElementById('links')?.click()
-        linkRef.current.click()
-        linkEl?.click()
+        // @ts-ignored
+        document.getElementById('links')[0].click()
+        
         // location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
       })
 
@@ -698,7 +695,7 @@ const KakaoMap = () => {
       </ul>
       <div className='relative'>
       {isLoading &&<InfowindowSkeleton />}
-      <Link ref={linkRef} id="links" to="" />
+      <Link ref={linkRef} id="links" to="">asfafsadfsad</Link>
       <div className="relative h-[600px] mx-auto z-0">
         <div className="">
           <div ref={mapRef} className="h-[580px] mx-auto mt-60 xs:mt-0"></div>
