@@ -36,7 +36,7 @@ const NaverLogin = () => {
     naverLoginscript.onload = () => {
       const naverLogin = new window.naver.LoginWithNaverId({
         clientId: NAVER_CLIENT_ID,
-        callbackUrl: 'http://localhost:5173/auth',
+        callbackUrl: 'https://safesea.vercel.app/auth',
         callbackHandle: true,
         isPopup: false,
         loginButton: {

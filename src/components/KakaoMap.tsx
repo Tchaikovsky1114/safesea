@@ -97,6 +97,9 @@ const { kakao } = window;
 
 
 const LOCAL_URL = 'http://localhost:5173'
+const DEPLOY_URL = 'https://safesea.vercel.app'
+
+
 
 const KakaoMap = () => {
   const [keywordValue, setKeywordValue] = useState('');
@@ -528,7 +531,7 @@ const KakaoMap = () => {
 
       goToReviewButton?.addEventListener('click',() => {
         console.log('excuted')
-        location.href = `${LOCAL_URL}/beaches/${place.sta_nm}`
+        location.href = `${DEPLOY_URL}/beaches/${place.sta_nm}`
       })
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
