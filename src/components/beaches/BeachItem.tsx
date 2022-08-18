@@ -147,7 +147,7 @@ const BeachItem = () => {
         {like && <FullHeartIcon className='w-8 h-8 mr-1 fill-rose-400 cursor-pointer' onClick={likesHandler} />}
         <span className="font-bold">{likes.length} likes</span>
       </div>
-      {!userState.userData.email && <p className='font-bold text-sm text-rose-400'>로그인 후 글 작성이 가능합니다</p>}
+      {!userState.userData.email && <p className='font-bold text-sm text-rose-400 mr-4'>로그인 후 글 작성이 가능합니다</p>}
       {userState.userData.email && <Link to={`post`}
       className='border border-transparent w-24 py-1 mb-2 font-bold bg-rose-400 text-white hover:bg-rose-400/80 text-center mr-2 rounded-lg'>글쓰기</Link>}
       </div>
