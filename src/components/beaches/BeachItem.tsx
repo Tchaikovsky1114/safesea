@@ -29,7 +29,11 @@ const BeachItem = () => {
   const commentsState = useAppSelector(state => state.comments)
   
   const likesHandler = async() => {
-    if(!beachId) return
+    if(!beachId || !userState.userData.email){
+      alert("로그인 후 사용 가능합니다!")
+      return
+    }
+    
     setLike(prev => !prev);
 
     if(like){
