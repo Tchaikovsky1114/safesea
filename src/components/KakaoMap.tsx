@@ -24,7 +24,7 @@ import GeneralPagination from './kakaomap/GeneralPagination';
 import BeachItem from './kakaomap/BeachMarkers'
 import BeachPagination from './kakaomap/BeachPagination';
 import MapAddOns from './kakaomap/MapAddOns';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 declare global {
   interface Window {
     kakao: any;
@@ -116,7 +116,7 @@ const KakaoMap = () => {
   const [oceansBeach, setOceansBeach] = useState<OceansBeachTypes[]>([]);
   const [oceansBeachTotalCount, setOceansBeachTotalCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
-  const linkRef = useRef<any>(null);
+  
   const [weatherInMiniPopup, setWeatherInMiniPopup] =
     useState<MiniWeatherDetailsTypes>({
       pop: [],
@@ -141,7 +141,7 @@ const KakaoMap = () => {
   const placeListRef = useRef<any>(null);
   const paginationRef = useRef<any>(null);
   const customInfo = useRef<any>(null);
-
+  const navigate = useNavigate()
 
 
   const keywordChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -531,15 +531,8 @@ const KakaoMap = () => {
       const goToReviewButton = document.getElementById('review-button');
 
       goToReviewButton?.addEventListener('click',() => {
-        
-        const linkEl = document.getElementById('links')
-        linkEl?.setAttribute('to',`/beaches/${place.sta_nm}`)
-        linkRef.current.click()
-        document.getElementById('links')!.onclick = function() {
-          console.log('excuted!')
-          moveBeaches(place.sta_nm)
-        }
-        
+        console.log('excuted')
+        navigate(`${DEPLOY_URL}/beaches/${place.sta_nm}`)
         // location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
       })
 
@@ -559,12 +552,13 @@ const KakaoMap = () => {
        })
        
        setIsLoading(false)
-      }) 
+      })
+     
   };
-  const navigate = useNavigate()
-  function moveBeaches(sido:string){
-    navigate(`/beaches/${sido}`)
-  }
+  
+
+
+  
   useEffect(() => {
     const script = document.createElement('script');
     script.src =
@@ -697,7 +691,7 @@ const KakaoMap = () => {
       </ul>
       <div className='relative'>
       {isLoading &&<InfowindowSkeleton />}
-      <Link ref={linkRef} id="links" to="">asfafsadfsad</Link>
+      
       <div className="relative h-[600px] mx-auto z-0">
         <div className="">
           <div ref={mapRef} className="h-[580px] mx-auto mt-60 xs:mt-0"></div>
