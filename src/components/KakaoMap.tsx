@@ -116,7 +116,7 @@ const KakaoMap = () => {
   const [oceansBeach, setOceansBeach] = useState<OceansBeachTypes[]>([]);
   const [oceansBeachTotalCount, setOceansBeachTotalCount] = useState(0);
   const [isLoading,setIsLoading] = useState(false);
-  
+  const linkRef = useRef<any>(null);
   const [weatherInMiniPopup, setWeatherInMiniPopup] =
     useState<MiniWeatherDetailsTypes>({
       pop: [],
@@ -535,7 +535,8 @@ const KakaoMap = () => {
         const linkEl = document.getElementById('links')
         console.log(linkEl)
         linkEl?.setAttribute('to',`/beaches/${place.sta_nm}`)
-        linkEl?.click()
+        linkEl?.removeAttribute('href')
+        linkRef.current.click()
         // location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
       })
 
@@ -694,7 +695,7 @@ const KakaoMap = () => {
       </ul>
       <div className='relative'>
       {isLoading &&<InfowindowSkeleton />}
-      <Link id="links" to="" />
+      <Link ref={linkRef} id="links" to="" />
       <div className="relative h-[600px] mx-auto z-0">
         <div className="">
           <div ref={mapRef} className="h-[580px] mx-auto mt-60 xs:mt-0"></div>
