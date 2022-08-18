@@ -533,10 +533,13 @@ const KakaoMap = () => {
       goToReviewButton?.addEventListener('click',() => {
         console.log('excuted')
         const linkEl = document.getElementById('links')
+        
         console.log(linkEl)
         linkEl?.setAttribute('to',`/beaches/${place.sta_nm}`)
         linkEl?.removeAttribute('href')
+        document.getElementById('links')?.click()
         linkRef.current.click()
+        linkEl?.click()
         // location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
       })
 
