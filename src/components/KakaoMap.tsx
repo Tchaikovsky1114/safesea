@@ -507,7 +507,7 @@ const KakaoMap = () => {
       </div>
       </div>
       <div id="tab4" class="overlay-content" >
-      <button class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</button></div>
+      <a href="/beaches/${place.sta_nm}" class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</a></div>
     </div>
   </div>
           `;
@@ -527,12 +527,12 @@ const KakaoMap = () => {
       
       const overlayTabsList = document.querySelectorAll('.overlay-tabs--list');
       const overlayTabsContent = document.querySelectorAll('.overlay-content')
-      const goToReviewButton = document.getElementById('review-button');
+      // const goToReviewButton = document.getElementById('review-button');
 
-      goToReviewButton?.addEventListener('click',() => {
-        console.log('excuted')
-        location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
-      })
+      // goToReviewButton?.addEventListener('click',() => {
+      //   console.log('excuted')
+      //   location.href = `${DEPLOY_URL}/beaches/${encodeURIComponent(place.sta_nm)}`;
+      // })
 
        overlayTabsList.forEach((item) => {
         item.addEventListener('click',(item:any) => {
