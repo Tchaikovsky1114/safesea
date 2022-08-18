@@ -18,12 +18,10 @@ const UserModal = ({ isModalOpen, modalHandler,setIsModalOpen }: UserModalProps)
   const navigate = useNavigate()
 
   const signOutHandler = async () => {
-    
     await signOut(auth)
-    localStorage.clear()
-    location.reload()
+    localStorage.clear() 
     navigate('/')
-    console.log('signOut')
+    location.reload()
   }
 
   useEffect(() => {
