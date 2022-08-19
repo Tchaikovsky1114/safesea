@@ -12,7 +12,7 @@ import ReactStars from 'react-rating-stars-component'
 import { faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import {faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import {Helmet} from 'react-helmet'
 let min = Math.ceil(1);
 let max = Math.floor(20);
 const nb = Math.ceil(Math.random() * (max - min))
@@ -113,7 +113,10 @@ const BeachItem = () => {
 
  
   return (
-    
+    <>
+    <Helmet>
+      <title>안전해 - {beachId} 해수욕장</title>
+    </Helmet>
       <div className='bg-sky-100 w-full h-full min-h-screen'>
       <div className='text-center pt-4 font-bold text-2xl flex items-center justify-center relative'>
         <span className='block flex-1 '>{beachId} 해수욕장</span>
@@ -187,7 +190,7 @@ const BeachItem = () => {
       <Outlet />
       </div>
       </div>
-      
+      </>
   );
 };
 
