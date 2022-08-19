@@ -718,7 +718,7 @@ const KakaoMap = () => {
               {isOceansBeachSearch && (
                 <ul id="placesList">
                   {places.map((place: any, index: number) => (
-                   <BeachItem key={Math.random() + index} place={place} index={index} />
+                   <BeachItem key={Math.random() + index} kakao={kakao} place={place} index={index} map={map} />
                   ))}
                 </ul>
               )}
