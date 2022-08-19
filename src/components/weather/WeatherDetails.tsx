@@ -23,25 +23,25 @@ const WeatherDetails = ({forecastDate,forecastCategory,forecastTime,forecastValu
        <p className={today === forecastDate && currentForecast < 100 && currentForecast >= -100 ? 'text-rose-400 font-bold text-xs' : 'text-black text-xs' }>{forecastTime.substr(0,2)}:00</p>
        {forecastValue === "강수없음"
        ? <p className={'text-xs'}>
-        <img src="/public/sunshine.png" alt="Sunshine" width={24} height={24} />
+        <img src="/sunshine.png" alt="Sunshine" width={24} height={24} />
         <span className="text-[10px] font-bold">맑음!</span>
        </p>
        : <p className={today === forecastDate && currentForecast < 100 && currentForecast >= -100 ? 'text-rose-400 text-xs font-bold' : 'text-black text-xs' }>
         {Number(forecastValue.split('.')[0]) <= 3 &&
         <>
-        <img className='mx-auto pb-2' src="/public/rainy.png" alt="Rainy" width={24} height={24} />
+        <img className='mx-auto pb-2' src="/rainy.png" alt="Rainy" width={24} height={24} />
         <span className="text-[10px] font-bold">적은량의 비 소식이 있어요</span>
         </>
         }
         {Number(forecastValue.split('.')[0]) > 3 && Number(forecastValue.split('.')[0]) < 15 &&
         <>
-        <img className='mx-auto pb-2' src="/public/rainy.png" alt="Rainy" width={24} height={24} />
+        <img className='mx-auto pb-2' src="/rainy.png" alt="Rainy" width={24} height={24} />
         <span className="text-[10px] font-bold">비가 내려요</span>
         </>
         }
         {Number(forecastValue.split('.')[0]) >= 15 &&
         <>
-        <img className='mx-auto pb-2' src="/public/rainy.png" alt="Rainy" width={24} height={24} />
+        <img className='mx-auto pb-2' src="/rainy.png" alt="Rainy" width={24} height={24} />
         <span className="text-[10px] font-bold">강한 비가 예상됩니다!</span>
         </>
         }
