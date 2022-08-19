@@ -121,7 +121,7 @@ const BeachItem = () => {
         <div className='absolute right-4'>
         <ReactStars
         count={5}
-        size={12}
+        size={8}
         isHalf={true} 
         emptyIcon={<FontAwesomeIcon icon={faEmptyStar} />}
         halfIcon={<FontAwesomeIcon icon={faStarHalfStroke} />}
