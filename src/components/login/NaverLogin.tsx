@@ -69,7 +69,8 @@ const NaverLogin = () => {
 
   return (
     <>
-      <div className="w-56 h-14" id="naverIdLogin"></div>
+    
+      <div className="w-60 h-14" id="naverIdLogin"></div>
     </>
   );
 };
