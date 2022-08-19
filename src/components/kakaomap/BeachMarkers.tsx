@@ -35,7 +35,7 @@ const BeachItem = ({ index, place,map,kakao }: BeachItemProps) => {
     })
     customOverlay.setMap(map.current);
     map.current.setCenter(new window.kakao.maps.LatLng(place.lat,place.lon))
-    window.kakao.maps.event.addListener(customOverlay,'mouseover', customOverlay.setMap(null))
+    window.kakao.maps.event.addListener(customOverlay,'mouseover', () => customOverlay.setMap(null))
   }
   return (
     <li key={'markerbg marker_' + index + 1} className="item" onClick={() => beachItemClickHandler(place)}>
