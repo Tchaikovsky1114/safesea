@@ -27,13 +27,17 @@ const BeachItem = ({ index, place,map,kakao }: BeachItemProps) => {
     const customOverlay = new window.kakao.maps.CustomOverlay({
       map: map.current,
       clickable:true,
-      content: /* html */ `<div class="customOverlay" class="font-bold text-xs p-4">${place.sta_nm} 해수욕장🔻</div>`,
+      content: /* html */ `<div class="customOverlay" class="font-bold text-xs p-4 bg-white text-purple-600">${place.sta_nm} 해수욕장🔻</div>`,
       xAnchor: 0.5,
-      yAnchor: 1.1,
+      yAnchor: 1.3,
       zIndex:3,
       position: new window.kakao.maps.LatLng(place.lat,place.lon)
     })
     customOverlay.setMap(map.current);
+    map.current.setCenter(new window.kakao.maps.LatLng(place.lat,place.lon))
+    window.kakao.event.addListener(customOverlay,'mouseover', () => {
+      customOverlay.setMap(null);
+    })
   }
   return (
     <li key={'markerbg marker_' + index + 1} className="item" onClick={() => beachItemClickHandler(place)}>
