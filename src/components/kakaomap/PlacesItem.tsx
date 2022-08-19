@@ -6,6 +6,7 @@ interface PlacesItemProps {
 }
 
 const PlacesItem = ({ index, place }: PlacesItemProps) => {
+  console.log(place);
   return (
     <li className="item">
       <span className={'markerbg marker_' + (index + 1)}></span>

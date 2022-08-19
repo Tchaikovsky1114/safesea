@@ -10,6 +10,7 @@ const BeachPagination = ({
   sidoClickHandler,
   sido,
 }: BeachPaginationProps) => {
+  
   return (
     <button
       key={index + 'oceanbeach-pagination'}
