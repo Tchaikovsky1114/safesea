@@ -221,11 +221,11 @@ const BeachReview = () => {
 
 
               {/* 댓글 UI 개선 필요 - like 기능, timestamp, userImage, username */}
-        <div className='w-full h-[200px] my-6'>  
+        <div className='w-full h-[300px] my-6'>  
           <p className='w-full border-b border-slate-700 pb-2'><FontAwesomeIcon icon={faComments} /> 댓글</p>
-          {comments.map((item,index) => <div key={item.data().cid + index}>
+          <ul className='h-[300px] overflow-y-hidden'>
+          {comments.map((item,index) => <li key={item.data().cid + index}>
             <div className='flex justify-center items-start flex-col border border-slate-400 my-1 mx-4'>
-
             <div className='flex items-center justify-between py-1 bg-slate-200 w-full px-2'>
               <div className='flex items-center justify-start py-1 bg-slate-200'>
             <span className="text-xs">{item.data().username}</span>
@@ -239,20 +239,21 @@ const BeachReview = () => {
             </div>
             </div>
             
-            <div className=' flex items-center justify-between h-10 w-full pl-2'>
-            <p className='flex-1'><span className="text-xs">{item.data().comment}</span></p>
-            <div className='text-xs flex gap-1 mr-1'>
+            <div className=' flex items-center justify-between h-fit w-full pl-2'>
+            <p className='flex-1 h-fit'><span className="text-xs block py-4">{item.data().comment}</span></p>
+            <div className='text-xs flex gap-1 mr-1 py-4'>
             <button className='w-8 h-fit bg-slate-400 text-white py-1 rounded-lg'>수정</button>
             <button className='w-8 h-fit bg-slate-400 text-white py-1 rounded-lg'>삭제</button>
             </div>
             </div>
 
             </div>
-            </div>)}
+            </li>)}
+            </ul>
         </div>
 
-        <div className='relative p-4 border bg-slate-100 my-2 rounded-md'>
-        <div className='flex justify-between py-1'>
+        <div className='relative border bg-slate-100 my-2 rounded-md px-2'>
+        <div className='flex justify-between py-4'>
             <p className='text-xs'><FontAwesomeIcon icon={faComment} /> 댓글 작성</p>
             <p className="text-xs font-bold">{userState.userData.username || '미로그인 상태입니다.'}</p>
           </div>
