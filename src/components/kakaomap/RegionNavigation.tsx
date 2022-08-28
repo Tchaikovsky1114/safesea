@@ -23,7 +23,7 @@ const RegionNavigation = ({ sidoClickHandler }: RegionNavigationProps) => {
       {SIDO_NM_ARRAY.map((sido) => (
         <li className='w-14' key={sido}>
           <button
-            className=" border border-white px-2 text-xs font-bold py-1 hover:border hover:border-transparent hover:bg-orange-400 hover:text-white shadow-lg rounded-md text-sky-700 md:text-slate-900"
+            className=" border border-white px-2 text-xs font-bold py-1 hover:border hover:border-transparent hover:bg-orange-400 hover:text-white shadow-lg rounded-md text-sky-700 "
             onClick={() => sidoClickHandler(sido)}
           >
             {sido}

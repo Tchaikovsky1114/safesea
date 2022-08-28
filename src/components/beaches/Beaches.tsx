@@ -1,6 +1,6 @@
-import React from 'react';
-import { Outlet, useParams } from 'react-router-dom';
-import BeachItem from './BeachItem';
+
+import { Outlet } from 'react-router-dom';
+
 
 const Beaches = () => {
   

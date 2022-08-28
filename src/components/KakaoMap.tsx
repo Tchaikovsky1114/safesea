@@ -8,15 +8,13 @@ import React, {
   useState,
 } from 'react';
 import './KaKaoMap.css';
-import axios, { AxiosResponse } from 'axios';
-import useConvertLatLng, { RsTypes } from '../hooks/useConvertLatLng';
+import axios from 'axios';
+import useConvertLatLng from '../hooks/useConvertLatLng';
 import useTime from '../hooks/useTime';
 import Weather from './weather/Weather';
-import WeatherDetails from './weather/WeatherDetails';
-import {HeartIcon} from '@heroicons/react/outline'
+
 import InfowindowSkeleton from './UI/InfowindowSkeleton';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
+
 import RegionNavigation from './kakaomap/RegionNavigation';
 import PlacesItem from './kakaomap/PlacesItem';
 import SearchForm from './kakaomap/SearchForm';
@@ -685,8 +683,8 @@ const KakaoMap = () => {
 
   return (
     <>
-      <h2 className='font-bold  bg-indigo-700  bg-opacity-30 py-2 rounded-tl-lg rounded-tr-lg text-white border-b shadow-lg shadow-gray-400'>지역별 해수욕장 찾기</h2>
-      <ul className="w-full container flex flex-wrap justify-center md:flex-nowrap flex-row md:justify-between md:items-center gap-2 py-2 md:border mx-auto p-4a md:bg-sky-400 md:rounded-bl-lg md:rounded-br-lg bg-opacity-60 shadow-lg shadow-gray-400">
+      <h2 className='font-bold  py-2 rounded-tl-lg rounded-tr-lg  border-b shadow-lg shadow-gray-400'>지역별 해수욕장 찾기</h2>
+      <ul className="w-full container flex flex-wrap justify-center md:flex-nowrap flex-row md:justify-between md:items-center gap-2 py-2 md:border mx-auto p-4a md:rounded-bl-lg md:rounded-br-lg bg-opacity-60 shadow-lg shadow-gray-400">
         <RegionNavigation sidoClickHandler ={sidoClickHandler} />
       </ul>
       

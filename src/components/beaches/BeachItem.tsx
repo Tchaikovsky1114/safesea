@@ -1,41 +1,41 @@
 import { HeartIcon } from '@heroicons/react/outline';
 import { HeartIcon as FullHeartIcon } from '@heroicons/react/solid';
 import dayjs from 'dayjs';
-import { arrayRemove, arrayUnion, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, startAfter, updateDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, DocumentData, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
 import { db } from '../../../firebase';
 import { useAppSelector } from '../../store/store';
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/ko'
 import ReactStars from 'react-rating-stars-component'
-import { faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import {faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {Helmet} from 'react-helmet'
+
 let min = Math.ceil(1);
 let max = Math.floor(20);
 const nb = Math.ceil(Math.random() * (max - min))
 
+
 const BeachItem = () => {
   const {beachId} = useParams()
-  const location = useLocation()
+  
   const [beachesInfo,setBeachesInfo] = useState<DocumentData>();
   const [like,setLike] = useState(false);
   const [likes,setLikes] = useState<DocumentData[]>([])
   const [beachReview,setBeachReview] = useState<DocumentData>([])
   const userState = useAppSelector(state => state.user);
   const [latingAverage,setLatingAverage] = useState<number|null>(null)
-  const commentsState = useAppSelector(state => state.comments)
+  
   
   const likesHandler = async() => {
     if(!beachId || !userState.userData.email){
       alert("로그인 후 사용 가능합니다!")
       return
     }
-    
     setLike(prev => !prev);
-
     if(like){
       await deleteDoc(doc(db,'beaches',beachId,'likes',userState.userData.username))
       await updateDoc(doc(db,'beaches',beachId),{
@@ -50,6 +50,7 @@ const BeachItem = () => {
       }) 
     }
   }
+  
   useEffect(() => {
     if(!beachId) return
 
