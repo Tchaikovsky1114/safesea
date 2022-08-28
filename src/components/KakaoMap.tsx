@@ -472,16 +472,16 @@ const KakaoMap = () => {
       <div id="tab2" class="overlay-content" >
       
       <div class="grid grid-flow-col grid-cols-3 mt-2">
-      <div class="col-span-2">
-      <h3 class="ml-4 text-sm font-bold">
-      ${filteredOceansWaterQuality?.res1 === "0" || filteredOceansWaterQuality?.res2 === "0" ? `<span class="text-center">물이 맑은 ${place.sta_nm} 해수욕장</span>` :"" }
+      <div class="col-span-2 w-full relative">
+      <h3 class="text-[10px] font-bold absolute left-10 pb-4">
+      ${filteredOceansWaterQuality?.res1 === "0" || filteredOceansWaterQuality?.res2 === "0" ? `<span class="block w-full text-center">물이 맑은 ${place.sta_nm} 해수욕장!</span>` :"" }
       ${Number(filteredOceansWaterQuality?.res1) > 100 || Number(filteredOceansWaterQuality?.res1) > 100 ? `<span class="text-center text-rose-600">적합하지만 주의가 필요해요!</span>` :"" }
       
       </h3>
 
       ${filteredOceansWaterQuality?.res_yn === "적합" ? "<img class='w-28 h-24' src='/approved.png' />" : "여행금지!"}
       </div>
-      <div class="col-span-1 flex flex-col justify-center items-start mx-auto">
+      <div class="col-span-1 flex flex-col justify-center items-start mx-auto mt-4">
       <div><span class="text-xs font-bold">대장균: ${filteredOceansWaterQuality?.res1}</span></div>
       <div><span class="text-xs font-bold">장구균: ${filteredOceansWaterQuality?.res2}</span></div>
       <div><span class="text-xs font-bold">적합여부: ${filteredOceansWaterQuality?.res_yn}</span></div>
@@ -491,7 +491,7 @@ const KakaoMap = () => {
       </div>
       <div id="tab3" class="overlay-content" >
 
-      <div class="flex-1 flex flex-row justify-between items-start mt-2">
+      <div class="flex-1 flex flex-row justify-between items-start mt-4">
       
       <div>${filteredOceansSandQuality?.res_yn === "적합" ? "<img class='w-28 h-24' src='/approved.png' />" : "여행금지!" }</div>
 
@@ -506,7 +506,7 @@ const KakaoMap = () => {
       </div>
       </div>
       <div id="tab4" class="overlay-content" >
-      <button class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2" id="review-button">후기 작성하러 가기</button></div>
+      <button class="w-full h-16 flex items-center justify-center font-bold hover:bg-orange-500 hover:text-white transition-all duration-150 mt-2 border border-white rounded-md" id="review-button">후기 작성하러 가기</button></div>
     </div>
   </div>
           `;

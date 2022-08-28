@@ -21,7 +21,7 @@ const MapAddOns = ({ map }: MapAddOnsProps) => {
           map.current.addOverlayMapTypeId(window.kakao.maps.MapTypeId.ROADMAP);
         }}
       >
-        일반지도
+        일반도로
       </button>
       <button
         className="text-xs font-bold py-2 px-4 border border-slate-600 mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"

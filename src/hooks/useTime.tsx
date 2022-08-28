@@ -28,26 +28,25 @@ useEffect(() => {
   if(day < 10){
     setDay('0'+ day);
   }
-}, [])
-
-  
-
   today = year+ "" + month + '' + day;
   
-  for(let i = 0; i < forecastNoticeTime.length; i++){
-    let h = Number(forecastNoticeTime[i]) - Number(hours);
-    
-    if( h === 0 || h === -1 || h === -2 ){
-      nowNoticeTime = Number(forecastNoticeTime[i]);
-    }
-    if(hours == 0 || hours == 1){
-      today = Number(year+ "" + month + '' + day) - 1
-      nowNoticeTime = Number(forecastNoticeTime[7]);
-    }
+  console.log(today);
+}, [])
+for(let i = 0; i < forecastNoticeTime.length; i++){
+  let h = Number(forecastNoticeTime[i]) - Number(hours);
+  
+  if( h === 0 || h === -1 || h === -2 ){
+    nowNoticeTime = Number(forecastNoticeTime[i]);
   }
-  if(nowNoticeTime < 10){
-    nowNoticeTime ='0' + nowNoticeTime
+  if(hours == 0 || hours == 1){
+    today = Number(year+ "" + month + '' + day) - 1
+    nowNoticeTime = Number(forecastNoticeTime[7]);
   }
+}
+if(nowNoticeTime < 10){
+  nowNoticeTime ='0' + nowNoticeTime
+}
+
 
   return {
     today,

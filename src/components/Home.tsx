@@ -16,7 +16,7 @@ const Home = () => {
       <Banner />
       <main className="grid grid-cols-2 h-[700px]">
         
-        <section className="col-span-2 text-center border p-4 bg-slate-100 ">
+        <section className="col-span-2 text-center ">
 
         <KakaoMap />
         </section>
