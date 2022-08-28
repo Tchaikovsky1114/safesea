@@ -120,7 +120,7 @@ const BeachItem = () => {
     </Helmet>
       <div className='bg-sky-100 w-full h-full min-h-screen'>
       <div className='text-center pt-4 font-bold text-2xl flex items-center justify-center relative'>
-        <span className='block flex-1 '>{beachId} 해수욕장</span>
+        <span className='block flex-1'>{beachId} 해수욕장</span>
         {latingAverage ?
         <div className='absolute right-4'>
         <ReactStars

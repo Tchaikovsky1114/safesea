@@ -107,6 +107,12 @@ const BeachReview = () => {
   }
   const commentSendHandler = async() => {
     if(!beachId) return;
+
+    if(!userState.userData.email){
+      alert('로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.');
+      navigate('/auth');
+      return;
+    }
     const commentToSend = comment
     dispatch(fetchComments({
       commentToSend,
