@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   signInFacebookHandler,
@@ -11,13 +11,15 @@ const Auth = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const googleLoginHandler = async () => {
+  const googleLoginHandler = useCallback(async () => {
     await dispatch(signInGoogleHandler());
     navigate('/');
-  };
-  const facebookLoginHandler = async () => {
+  },[]);
+
+  const facebookLoginHandler = useCallback(async () => {
     await dispatch(signInFacebookHandler());
-  };
+  },[]);
+  
   return (
     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <div className="flex flex-col gap-4">

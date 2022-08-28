@@ -27,7 +27,7 @@ const BeachItem = ({ index, place,map,kakao }: BeachItemProps) => {
     showingOverlay.current.setMap(null)
   }
   const beachItemClickHandler = (place:any) => {
-    console.log(place)
+    
     showingOverlay.current = new window.kakao.maps.CustomOverlay({
       map: map.current,
       clickable:true,

@@ -4,7 +4,7 @@ import { FirebaseError } from 'firebase/app';
 import { addDoc, collection, deleteDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { CarouselProvider, Slide, Slider } from 'pure-react-carousel';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db, storage } from '../../../firebase';
 import { useAppSelector } from '../../store/store';
@@ -18,9 +18,6 @@ interface BeachUpdateReviewProps {
 
 const BeachUpdateReview = ({updateImage,setUpdateImage}:BeachUpdateReviewProps) => {
   const imagePickerRef = useRef<HTMLInputElement>(null)
-  
-
-
   const addImageHandler = (e:ChangeEvent<HTMLInputElement>) => {
     if(e.currentTarget.files) {
       const fileArr = e.currentTarget.files;
@@ -39,15 +36,16 @@ const BeachUpdateReview = ({updateImage,setUpdateImage}:BeachUpdateReviewProps) 
       }
     }
   }
-  const deleteUpdateImageHandler = (currentImage:number) => {
+  const deleteUpdateImageHandler = useCallback((currentImage:number) => {
     const selectImage = updateImage.slice()
     selectImage.splice(currentImage, 1)
-    console.log(selectImage)
+    
     setUpdateImage(selectImage)
-  }
-  const imagePickerHandler = () => {
+  },[updateImage])
+
+  const imagePickerHandler = useCallback(() => {
     imagePickerRef.current!.click();
-  }
+  },[])
  
   return (
     <div>

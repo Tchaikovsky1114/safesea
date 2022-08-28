@@ -12,7 +12,7 @@ import NaverLogin from '../components/login/NaverLogin';
 import Profile from '../components/user/Profile';
 
 import TopNavigation from '../components/UI/TopNavigation';
-import { useAppSelector } from '../store/store';
+
 
 
 interface RootProps {
@@ -20,7 +20,6 @@ interface RootProps {
 }
 
 const Root = ({modalHandler}:RootProps) => {
-  const userState = useAppSelector((state) => state.user);
   
   
   return (

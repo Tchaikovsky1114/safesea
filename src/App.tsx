@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import UserModal from './components/UI/UserModal';
 import Root from './routes/Root'
 
 function App() {
   
   const [isModalOpen,setIsModalOpen] = useState(false);
-  const modalHandler = () => {
+  const modalHandler = useCallback(() => {
     setIsModalOpen(prev => !prev)
-  }
+  },[])
 
   return (
     <>

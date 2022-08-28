@@ -30,7 +30,7 @@ useEffect(() => {
   }
   today = year+ "" + month + '' + day;
   
-  console.log(today);
+  
 }, [])
 for(let i = 0; i < forecastNoticeTime.length; i++){
   let h = Number(forecastNoticeTime[i]) - Number(hours);

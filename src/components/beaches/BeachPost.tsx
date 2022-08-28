@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { FontAwesomeIcon,FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -27,16 +27,19 @@ const BeachPost = () => {
   // firebase beaches에 collection 생성 (post)
   // user에도 collection 생성 (post) 내가 쓴 post 확인할 수 있게끔..
   // 
-  const ratingChangeHandler = (currentRating:any) => {
+  const ratingChangeHandler = useCallback((currentRating:any) => {
     setMyLating(currentRating);
-    console.log(currentRating);
-  }
-  const postCancelHandler = () => {
+  },[myLating]);
+
+
+  const postCancelHandler = useCallback(() => {
     navigate(-1)
-  }
-  const imagePickerHandler = () => {
+  },[])
+
+  const imagePickerHandler = useCallback(() => {
     imagePicker.current!.click();
-  }
+  },[])
+
   const addImageHandler = (e:ChangeEvent<HTMLInputElement>) => {
     if(e.currentTarget.files){
       const fileArr = e.currentTarget.files;
@@ -55,12 +58,14 @@ const BeachPost = () => {
       }
     }
   }
-  const titleChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
+  const titleChangeHandler = useCallback((e:ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value)
-  }
-  const bodyChangeHandler = (e:ChangeEvent<HTMLTextAreaElement>) => {
+  },[])
+
+  const bodyChangeHandler = useCallback((e:ChangeEvent<HTMLTextAreaElement>) => {
     setBody(e.currentTarget.value)
-  }
+  },[])
+  
   const deleteSelectedImageHandler = (currentImage:string) => {
     setSelectedImage((prev) => prev.filter((item) => item !== currentImage ))
   }

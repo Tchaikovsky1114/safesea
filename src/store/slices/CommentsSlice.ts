@@ -41,7 +41,7 @@ interface CommentsParamsTypes {
 export const fetchComments = createAsyncThunk<void,CommentsParamsTypes,{rejectValue:FirebaseError}>('comments/fetchComments', async(commentsInfo,{rejectWithValue}) => {
 
   try {
-    // const docRef = doc(db,'beaches',commentsInfo.beachId,'posts',commentsInfo.pid,'comments')
+    
     const obj:CommentsTypes = {
       comment: commentsInfo.commentToSend,
       username: commentsInfo.username,
@@ -72,7 +72,7 @@ interface CommentLikesParamsTypes {
   email:string
 }
 export const fetchCommentLikes = createAsyncThunk<void,CommentLikesParamsTypes,{rejectValue:FirebaseError}>('comments/fetchCommentLikes', async(commentLikesInfo,{rejectWithValue}) => {
-  console.log(commentLikesInfo)
+  
   const {beachId,cid,pid,email,type} = commentLikesInfo
   try {
    
@@ -105,7 +105,7 @@ const commentsSlice = createSlice({
     
     }),
     builder.addCase(fetchCommentLikes.fulfilled,(state,action) => {
-      console.log('likes')
+      
     }),
     builder.addCase(fetchCommentLikes.rejected,(state,action) => {
       console.error(action.error.message)

@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import dayjs from 'dayjs';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+
+import  { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { faComment, faStar, faHeart as faFillHeart } from '@fortawesome/free-solid-svg-icons';
 import { faComments, faHeart, faStar as faEmptyStar, faStarHalfStroke} from '@fortawesome/free-regular-svg-icons'
 import ReactStars from 'react-rating-stars-component'
-import { addDoc, collection, deleteDoc, doc, DocumentData, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, DocumentData, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { db, storage } from '../../../firebase';
 
 import BeachUpdateReview from './BeachUpdateReview';
@@ -54,17 +54,20 @@ const BeachReview = () => {
     navigate(-1);
   }
 
-  const updateTitleHandler = (e:ChangeEvent<HTMLInputElement>) => {
+  const updateTitleHandler = useCallback((e:ChangeEvent<HTMLInputElement>) => {
     const {currentTarget:{value}} = e
     setUpdateTitleValue(value)
-  }
-  const updateModeHandler = () => {
+  },[])
+  
+  const updateModeHandler = useCallback(() => {
     setEditMode(true);
-  }
-  const cancelWriteReviewHandler = () => {
+  },[])
+
+  const cancelWriteReviewHandler = useCallback(() => {
     navigate(-1)
     setEditMode(false);
-  }
+  },[])
+
   const updateReviewHandler = async() => {
     if(!beachId) return
     try {
@@ -97,14 +100,15 @@ const BeachReview = () => {
     }
     
   }
-  const updateBodyHandler = (e:ChangeEvent<HTMLTextAreaElement>) => {
+  const updateBodyHandler = useCallback((e:ChangeEvent<HTMLTextAreaElement>) => {
     const {currentTarget:{value}} = e;
     setupdateBodyValue(value);
-  }
-  const commentChangeHandler = (e:ChangeEvent<HTMLTextAreaElement>) => {
+  },[])
+
+  const commentChangeHandler = useCallback((e:ChangeEvent<HTMLTextAreaElement>) => {
     const {currentTarget:{value}} = e;
     setComment(value);
-  }
+  },[])
   const commentSendHandler = async() => {
     if(!beachId) return;
 
@@ -136,7 +140,7 @@ const BeachReview = () => {
     }))
   }
 
-  console.log(updateImage);
+  
 
   
   useEffect(() => {
@@ -250,7 +254,7 @@ const BeachReview = () => {
         <div className='relative p-4 border bg-slate-100 my-2 rounded-md'>
         <div className='flex justify-between py-1'>
             <p className='text-xs'><FontAwesomeIcon icon={faComment} /> 댓글 작성</p>
-            <p className="text-xs font-bold">{data.username}</p>
+            <p className="text-xs font-bold">{userState.userData.username || '미로그인 상태입니다.'}</p>
           </div>
           <textarea className=' w-full h-20 focus:outline-none text-xs' onChange={commentChangeHandler} value={comment}/>
           <button className='absolute w-12 bottom-5 right-4 text-sm bg-rose-400 text-white p-2 rounded-tl-lg' onClick={commentSendHandler}>전송</button>
