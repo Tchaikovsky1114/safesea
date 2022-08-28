@@ -117,6 +117,9 @@ const BeachReview = () => {
       navigate('/auth');
       return;
     }
+    if(comment.trim().length < 1){
+      alert('2글자 이상 입력해주세요');
+    }
     const commentToSend = comment
     dispatch(fetchComments({
       commentToSend,
@@ -223,7 +226,7 @@ const BeachReview = () => {
               {/* 댓글 UI 개선 필요 - like 기능, timestamp, userImage, username */}
         <div className='w-full h-[300px] my-6'>  
           <p className='w-full border-b border-slate-700 pb-2'><FontAwesomeIcon icon={faComments} /> 댓글</p>
-          <ul className='h-[300px] overflow-y-hidden'>
+          <ul className='h-[300px] overflow-y-scroll'>
           {comments.map((item,index) => <li key={item.data().cid + index}>
             <div className='flex justify-center items-start flex-col border border-slate-400 my-1 mx-4'>
             <div className='flex items-center justify-between py-1 bg-slate-200 w-full px-2'>
