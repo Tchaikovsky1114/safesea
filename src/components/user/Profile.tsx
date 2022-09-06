@@ -67,10 +67,10 @@ const Profile = () => {
   return (
     <div className="w-full my-0 mx-auto flex justify-center gap-8 flex-col items-center">
       <p className="py-4">{username}'s Profile</p>
-      <div className="">
-        <div className="w-[200px] h-[200px] rounded-full relative">
+      <div className="flex justify-center flex-col items-center">
+        <div className="w-[180px] h-[180px] rounded-full relative">
           <img
-            className="absolute top-0 rounded-full w-full h-full"
+            className="absolute top-0 rounded-full w-full h-full mx-auto"
             src={userState.userData.userImage}
             alt="image"
           />
@@ -103,7 +103,7 @@ const Profile = () => {
           </>
         )}
         <div className="py-4">
-          <button className="border py-1 px-4" onClick={filePickerHandler}>
+          <button className="border border-slate-400 py-1 px-4" onClick={filePickerHandler}>
             프로필 사진 변경하기
           </button>
         </div>
@@ -114,7 +114,7 @@ const Profile = () => {
           onChange={addImageHandler}
         />
       </div>
-      <div>
+      <div className='w-full flex justify-center items-center flex-col gap-2'>
         {!updateMode && <p>닉네임: {username}</p>}
         {updateMode && (
           <>
@@ -131,13 +131,13 @@ const Profile = () => {
             </button>
           </>
         )}
-        <button className="border py-1 px-4" onClick={updateModeHandler}>
-          변경하기
+        <button className="border border-slate-400 py-1 px-4 mx-auto" onClick={updateModeHandler}>
+          {updateMode ? '취소하기' : "변경하기"}
         </button>
       </div>
 
       <button
-        className="py-10 w-full border bg-rose-600 text-white"
+        className="py-10 w-full border bg-rose-600 text-white hover:text-rose-600 hover:bg-slate-50 duration-150 transition-all hover:border-none"
         onClick={() => navigate('/')}
       >
         메인으로

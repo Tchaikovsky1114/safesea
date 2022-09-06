@@ -108,7 +108,7 @@ const BeachPost = () => {
   }
 
   return (
-    <div className='w-[300px] xs:w-96 xs:h-fit z-20 bg-white border-slate-400 rounded-lg box-border border shadow-md shadow-slate-400 p-1'>
+    <div className='w-[330px] xs:w-96 xs:h-fit z-20 bg-white border-slate-400 rounded-lg box-border border shadow-md shadow-slate-400 p-1'>
       <label htmlFor="" ><span className='font-bold text-xs pl-1'>제목</span>
       <input
       type="text"
@@ -132,8 +132,8 @@ const BeachPost = () => {
         <Slider >
         <div className='flex flex-row h-[230px]'>
           {selectedImage.map((item,index) => (
-            <Slide key={index + ''} index={index} className="border w-[200px] h-[250px] flex justify-center items-center relative" tabIndex={index}>
-              <img className='absolute object-fill inset-0 w-full h-[210px] mx-auto' src={item} alt="" />
+            <Slide key={index + ''} index={index} className="border w-full h-[250px] flex justify-center items-center relative" tabIndex={index}>
+              <img className='absolute object-fill inset-0 w-full h-[150px] mx-auto' src={item} alt="" />
               <button>
                 <FontAwesomeIcon icon={faTrashCan} className="absolute z-10 right-2" fill='#f91' color='#f41' onClick={() =>deleteSelectedImageHandler(item)} />
               </button>

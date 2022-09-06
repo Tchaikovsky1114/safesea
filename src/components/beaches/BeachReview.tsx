@@ -117,8 +117,9 @@ const BeachReview = () => {
       navigate('/auth');
       return;
     }
-    if(comment.trim().length < 1){
+    if(comment.trim().length < 2){
       alert('2글자 이상 입력해주세요');
+      return
     }
     const commentToSend = comment
     dispatch(fetchComments({
@@ -168,16 +169,16 @@ const BeachReview = () => {
   return (
   
     <div
-    className='absolute w-[320px] top-60 xs:w-[550px] xs:h-[600px] -translate-x-1/2 -translate-y-1/2 mx-auto bg-white z-30 xs:top-1/2 rounded-lg p-2 border-2 border-indigo-400 overflow-y-scroll shadow-xl shadow-blue-700-200'>
+    className='absolute w-[320px] top-60 xs:w-[550px] xs:h-[600px] -translate-x-1/2 -translate-y-1/2 mx-auto bg-white z-30 xs:top-1/2 rounded-lg border-2 border-indigo-400 overflow-y-auto scroll-m-1 scroll shadow-xl shadow-indgo-200 '>
       <div className='w-full h-fit mx-auto'>
-      <div className='flex justify-between items-center py-2 border-b-2 bg-gray-400 px-4 border-y-2 border-y-slate-700 text-gray-100 mt-2'>
+      <div className='m-4 flex justify-between items-center py-2 border-b-2 bg-gray-400 px-4 border-y-2 border-y-slate-700 text-gray-100 mt-2'>
         {!editMode && <p className='text-sm '>{data.title}</p>}
         {editMode && <input className='text-sm text-black w-full bg-indigo-100' onChange={updateTitleHandler} maxLength={20} value={updateTitleValue} />}
         
         {!editMode && <p className="text-sm"><span className="text-xs xs:text-sm xs:font-bold">작성자:{' '}</span>
         <span className="text-xs xs:text-sm">{data.username}</span></p>}
         </div>
-        <div className="flex flex-row justify-between border-b border-slate-400/50">
+        <div className="m-4 flex flex-row justify-between border-b border-slate-400/50">
         <div className='text-right w-full py-2'><span className="text-xs">{postTime} 작성</span></div>
         {data.uid === userId &&
         <div className='flex flex-row items-center justify-end text-xs'>
@@ -194,8 +195,8 @@ const BeachReview = () => {
         <img key={item} className='w-[400px] mx-auto' src={item} alt="" />
       ))}
       </div>
-      <p className='mb-12 text-sm'>{data.body}</p>
-      <div className='flex justify-center flex-col items-center gap-2'>
+      <p className='mb-12 text-sm m-4'>{data.body}</p>
+      <div className='flex justify-center flex-col items-center gap-2 border-y py-4 border-slate-200 w-full'>
         <h3 className='text-sm'>{data.username}님께서 평가하신 점수는?</h3>
         <ReactStars
         count={5}
@@ -224,8 +225,8 @@ const BeachReview = () => {
 
 
               {/* 댓글 UI 개선 필요 - like 기능, timestamp, userImage, username */}
-        <div className='w-full h-[300px] my-6'>  
-          <p className='w-full border-b border-slate-700 pb-2'><FontAwesomeIcon icon={faComments} /> 댓글</p>
+        <div className='pl-2 w-full h-[300px] mt-4 mx-auto p-1'>  
+          <p className=' w-full border-b border-slate-700 p-2'><FontAwesomeIcon icon={faComments} /> 댓글</p>
           <ul className='h-[300px] overflow-y-scroll'>
           {comments.map((item,index) => <li key={item.data().cid + index}>
             <div className='flex justify-center items-start flex-col border border-slate-400 my-1 mx-4'>
@@ -255,17 +256,17 @@ const BeachReview = () => {
             </ul>
         </div>
 
-        <div className='relative border bg-slate-100 my-2 rounded-md px-2'>
-        <div className='flex justify-between py-4'>
+        <div className='relative border bg-slate-100 my-16 rounded-md px-2 mx-1'>
+        <div className='flex justify-between py-6'>
             <p className='text-xs'><FontAwesomeIcon icon={faComment} /> 댓글 작성</p>
             <p className="text-xs font-bold">{userState.userData.username || '미로그인 상태입니다.'}</p>
           </div>
           <textarea className=' w-full h-20 focus:outline-none text-xs' onChange={commentChangeHandler} value={comment}/>
-          <button className='absolute w-12 bottom-5 right-4 text-sm bg-rose-400 text-white p-2 rounded-tl-lg' onClick={commentSendHandler}>전송</button>
+          <button className='absolute w-12 bottom-0 right-0 text-sm bg-rose-400 text-white p-2 rounded-tl-lg' onClick={commentSendHandler}>전송</button>
         </div>
-      <div className='flex justify-end items-center'>
+      <div className='relative flex justify-end items-center'>
       {editMode && <button className='w-[82px] border p-2 rounded-lg bg-rose-400 text-white' onClick={updateReviewHandler} >수정하기</button>}
-      <button className=' border p-2 rounded-lg bg-indigo-400 text-white' onClick={cancelWriteReviewHandler}>뒤로가기</button>
+      <button className='absolute bottom-2 border p-2 rounded-lg bg-indigo-400 text-white' onClick={cancelWriteReviewHandler}>뒤로가기</button>
       
       </div>
     </div> 
