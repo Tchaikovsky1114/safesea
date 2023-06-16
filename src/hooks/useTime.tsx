@@ -19,13 +19,13 @@ const useTime:any = () => {
   
   
 useEffect(() => {
-  if(month < 10){
+  if(+month < 10){
     setMonth('0'+ month);
   }
-  if(hours < 10){
+  if(+hours < 10){
     setHours('0'+ hours);
   }
-  if(day < 10){
+  if(+day < 10){
     setDay('0'+ day);
   }
   today = year+ "" + month + '' + day;
