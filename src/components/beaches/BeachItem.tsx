@@ -30,6 +30,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Helmet } from 'react-helmet';
+import BoardStatusLine from './BoardStatusLine';
 
 let min = Math.ceil(1);
 let max = Math.floor(20);
@@ -207,25 +208,7 @@ const BeachItem = () => {
           {beachId}해수욕장에서 느낀 생생한 후기를 남겨주세요!
         </h3>
         <ul className=" border-t-2 border-t-gray-200 px-4 pb-10">
-          <li className="w-full">
-            <div className="flex flex-row justify-between items-center py-2 mr-2 border-b border-b-slate-300 w-full">
-              <div className="md:flex-[1.2] text-center text-xs font-bold hidden md:block">
-                글 번호
-              </div>
-              <div className="flex-[4] md:flex-[6.5] text-xs font-bold">
-                제목{' '}
-              </div>
-              <div className="flex-[1.3] md:flex-[1.3] text-xs font-bold">
-                작성자
-              </div>
-              <div className="flex-[1.2] md:flex-[1.2] text-xs font-bold">
-                작성일
-              </div>
-              <div className="flex-[0.6] md:flex-[0.6] text-xs font-bold">
-                평점
-              </div>
-            </div>
-          </li>
+          <BoardStatusLine />
           {beachReview.map((review: any, index: number) => (
             <li key={review.data().pid + index} className="py-2">
               <Link
