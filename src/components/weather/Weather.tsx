@@ -2,6 +2,7 @@ import React from 'react';
 import useTime from '../../hooks/useTime';
 import { ResponseDataTypes, WeatherDetailsTypes } from '../KakaoMap';
 import WeatherDetails from './WeatherDetails';
+import WeatherItem from './WeatherItem';
 
 interface WeatherProps {
   minMaxTemp:ResponseDataTypes[]
@@ -38,40 +39,11 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
 
     <div className="h-full scrollbar scrollbar-thumb-rose-900 scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full hover:scrollbar-thumb-blue-500 transition-colors duration-150">
       <p className="text-rose-400 text-xs font-bold text-left pb-2"> * 빨간색이 현재 시간의 날씨를 나타내고 있어요!</p>
-
-
-      <div className='flex flex-row justify-start'>  
-    <h3 className='w-full font-bold text-[18px] py-2 min-w-[100px]   flex justify-center items-center border bg-rose-400'><p>현재 기온</p></h3>
-    {weather.tmp.map((item,index) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category + index} forecastDate={item.fcstDate} forecastCategory={item.category}  forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
-    </div>
-
-    
-      <div className='flex flex-row justify-start'>    
-      <h3 className='w-full font-bold text-base min-w-[100px]  flex justify-center items-center border bg-indigo-400 '><p>비소식</p></h3>
-    {weather.pcp.map((item,index) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category+ index} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
-    </div>
-    
-    
-
-    <div className='flex flex-row justify-start'>
-    <h3 className='w-full font-bold text-base min-w-[100px]   flex justify-center items-center border bg-slate-400'><p>비 내릴 확률</p></h3>
-    {weather.pop.map((item,index) => <WeatherDetails key={item.fcstTime + item.fcstDate + item.category + index}  forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
-    </div>
-
-    <div className='flex flex-row justify-start'>
-    <h3 className='w-full font-bold text-base min-w-[100px]   flex justify-center items-center border bg-blue-400'><p>습도</p></h3>
-    {weather.reh.map((item,index) => <WeatherDetails  key={item.fcstTime + item.fcstDate + item.category + index} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
-    </div>
-
-    
-
-    <div className='flex flex-row justify-start'>  
-    <h3 className='w-full font-bold text-base min-w-[100px]  flex justify-center items-center border bg-indigo-400 '><p>하늘 상태</p></h3>
-    {weather.sky.map((item,index) => <WeatherDetails  key={item.fcstTime + item.fcstDate + item.category + index} forecastDate={item.fcstDate} forecastCategory={item.category} forecastTime={item.fcstTime} forecastValue={item.fcstValue} />)}
-    </div>
-    
-    
-
+      <WeatherItem bgColor='bg-rose-400' weatherType={weather.tmp} text='현재 기온' textSize='text-[18px]' />
+      <WeatherItem weatherType={weather.pcp} bgColor='bg-indigo-400' text='비소식' />
+      <WeatherItem weatherType={weather.pop} bgColor='bg-slate-400' text='강우 확률' />
+      <WeatherItem weatherType={weather.reh} bgColor='bg-blue-400' text='습도' />
+      <WeatherItem weatherType={weather.sky} bgColor='bg-indigo-400' text='하늘' />
  
     </div>
         <div className="p-2"></div>
