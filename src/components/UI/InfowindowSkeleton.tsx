@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 const InfowindowSkeleton = () => {
   return (
@@ -27,4 +27,4 @@ const InfowindowSkeleton = () => {
   );
 };
 
-export default InfowindowSkeleton;
+export default memo(InfowindowSkeleton);

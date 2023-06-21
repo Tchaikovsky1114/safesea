@@ -71,6 +71,20 @@ const BeachItem = () => {
       });
     }
   };
+  const fetchRating = async () => {
+    if(!beachId) return;
+    const querySnapshot = await getDocs(
+      collection(db, 'beaches', beachId, 'posts')
+    );
+    let latingAvg = 0;
+    let totalCount = querySnapshot.size;
+    let result = 0;
+    querySnapshot.forEach((doc) => {
+      latingAvg += doc.data().lating;
+    });
+    result = latingAvg / totalCount;
+    setLatingAverage(Math.round(result * 2) / 2);
+  };
 
   useEffect(() => {
     if (!beachId) return;
@@ -119,23 +133,8 @@ const BeachItem = () => {
     );
     return () => unsubscribe();
   }, []);
-
+  
   useEffect(() => {
-    if (!beachId) return;
-    const fetchRating = async () => {
-      const querySnapshot = await getDocs(
-        collection(db, 'beaches', beachId, 'posts')
-      );
-      let latingAvg = 0;
-      let totalCount = querySnapshot.size;
-      let result = 0;
-      querySnapshot.forEach((doc) => {
-        latingAvg += doc.data().lating;
-      });
-      result = latingAvg / totalCount;
-      setLatingAverage(Math.round(result * 2) / 2);
-    };
-
     fetchRating();
   }, []);
 
