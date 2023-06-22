@@ -1,7 +1,5 @@
-import React from 'react';
-import useTime from '../../hooks/useTime';
+
 import { ResponseDataTypes, WeatherDetailsTypes } from '../KakaoMap';
-import WeatherDetails from './WeatherDetails';
 import WeatherItem from './WeatherItem';
 
 interface WeatherProps {
@@ -10,7 +8,7 @@ interface WeatherProps {
   weather: WeatherDetailsTypes
 }
 const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
-  const {hours} = useTime();
+  
   
   return (
     <div className='mt-24'>
@@ -44,7 +42,6 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
       <WeatherItem weatherType={weather.pop} bgColor='bg-slate-400' text='강우 확률' />
       <WeatherItem weatherType={weather.reh} bgColor='bg-blue-400' text='습도' />
       <WeatherItem weatherType={weather.sky} bgColor='bg-indigo-400' text='하늘' />
- 
     </div>
         <div className="p-2"></div>
     </div>

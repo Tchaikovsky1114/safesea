@@ -15,8 +15,9 @@ import { Link } from 'react-router-dom';
 import { db } from '../../../firebase';
 import { useAppSelector } from '../../store/store';
 import KakaoMap from '../KakaoMap';
+import FavoriteBeachCard from './FavoriteBeachCard';
 
-interface BeachTypes {
+export interface BeachTypes {
   beach_knd: '모래';
   beach_len: number;
   beach_wid: number;
@@ -59,40 +60,7 @@ const MyFavorites = () => {
       </h2>
       <div className="flex flex-col gap-4 md:flex-row md:flex-wrap">
         {myFavoriteBeaches.map((beach: BeachTypes, index: number) => (
-          <ul
-            className="border p-8 bg-sky-100 rounded-md mx-auto md:min-w-[360px] w-full"
-            key={beach.data().sta_nm}
-          >
-            <Link
-              className="text-sm font-bold flex flex-col justify-center space-y-4"
-              to={`/beaches/${beach.data().sta_nm}`}
-            >
-              <li className="text-center">{beach.data().sta_nm} 해수욕장</li>
-              <li>
-                <img
-                  className="w-24 h-24 rounded-full mx-auto"
-                  src={`/beach${index + 1}.jpg`}
-                  alt=""
-                />
-              </li>
-              <li className="text-center text-sm py-2">
-                {beach.data().sido_nm}{' '}
-                {beach.data().gugun_nm ? beach.data().gugun_nm : '정보 없음'}
-              </li>
-              <li className="text-xs">
-                해수욕장의 길이:{' '}
-                {beach.data().beach_len ? beach.data().beach_len : '정보 없음'}M
-              </li>
-              <li className="text-xs">
-                해수욕장의 폭:{' '}
-                {beach.data().beach_wid ? beach.data().beach_wid : '정보 없음'}M
-              </li>
-              <li className="text-xs">
-                구급전화:{' '}
-                {beach.data().link_tel ? beach.data().link_tel : '정보 없음'}
-              </li>
-            </Link>
-          </ul>
+          <FavoriteBeachCard beach={beach} index={index} />
         ))}
       </div>
     </div>

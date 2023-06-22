@@ -118,7 +118,7 @@ const BeachItem = () => {
     setLike(
       likes.findIndex((like) => like.id === userState.userData.username) !== -1
     );
-  });
+  },[likes]);
 
   useEffect(() => {
     if (!beachId) return;

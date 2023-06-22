@@ -6,7 +6,6 @@ const Beaches = () => {
   
   return (
     <div>
-      
       <Outlet />
     </div>
   );
