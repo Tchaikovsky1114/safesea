@@ -1,21 +1,7 @@
 import { HeartIcon } from '@heroicons/react/outline';
 import { HeartIcon as FullHeartIcon } from '@heroicons/react/solid';
 import dayjs from 'dayjs';
-import {
-  arrayRemove,
-  arrayUnion,
-  collection,
-  deleteDoc,
-  doc,
-  DocumentData,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { arrayRemove,arrayUnion,collection,deleteDoc,doc,DocumentData,getDoc,getDocs,onSnapshot,orderBy,query,setDoc,updateDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { db } from '../../../firebase';
@@ -24,10 +10,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
 import ReactStars from 'react-rating-stars-component';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import {
-  faStar as faEmptyStar,
-  faStarHalfStroke,
-} from '@fortawesome/free-regular-svg-icons';
+import { faStar as faEmptyStar,faStarHalfStroke } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Helmet } from 'react-helmet';
 import BoardStatusLine from './BoardStatusLine';
@@ -35,7 +18,8 @@ import BoardStatusLine from './BoardStatusLine';
 let min = Math.ceil(1);
 let max = Math.floor(20);
 const nb = Math.ceil(Math.random() * (max - min));
-
+dayjs.extend(relativeTime);
+dayjs.locale('ko');
 const BeachItem = () => {
   const { beachId } = useParams();
 
@@ -86,20 +70,16 @@ const BeachItem = () => {
     setLatingAverage(Math.round(result * 2) / 2);
   };
 
-  useEffect(() => {
+  const fetchData = async () => {
     if (!beachId) return;
-
-    const fetchData = async () => {
-      const docRef = doc(db, 'beaches', beachId);
-      const docSnap = await getDoc(docRef);
-      setBeachesInfo(docSnap.data());
-    };
-    fetchData();
-  }, []);
-
+    const docRef = doc(db, 'beaches', beachId);
+    const docSnap = await getDoc(docRef);
+    setBeachesInfo(docSnap.data());
+  };
+  
   useEffect(() => {
-    dayjs.extend(relativeTime);
-    dayjs.locale('ko');
+    fetchData();
+    fetchRating();
   }, []);
 
   useEffect(() => {
@@ -132,10 +112,6 @@ const BeachItem = () => {
       }
     );
     return () => unsubscribe();
-  }, []);
-  
-  useEffect(() => {
-    fetchRating();
   }, []);
 
   return (
