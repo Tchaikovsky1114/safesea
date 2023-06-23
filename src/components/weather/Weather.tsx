@@ -1,5 +1,5 @@
 
-import { ResponseDataTypes, WeatherDetailsTypes } from '../KakaoMap';
+import { ResponseDataTypes, WeatherDetailsTypes } from '../../types/interface/weather';
 import WeatherItem from './WeatherItem';
 
 interface WeatherProps {

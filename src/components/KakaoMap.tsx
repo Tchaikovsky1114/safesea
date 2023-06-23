@@ -16,11 +16,7 @@ import MapAddOns from './kakaomap/MapAddOns';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL, BEACH_URL, KAKAO_MAP_KEY, WEATHER_API_KEY } from '../constants/api';
 import { MiniWeatherDetailsTypes, OceansBeachTypes, ResponseDataTypes, WeatherDetailsTypes } from '../types/interface/weather';
-
-
 const { kakao } = window;
-
-
 
 const KakaoMap = () => {
   const [keywordValue, setKeywordValue] = useState('');
@@ -86,7 +82,7 @@ const KakaoMap = () => {
             )
             .then((response) => {
               const result: ResponseDataTypes[] = response.data.response.body.items.item;
-
+              console.log(result);
               result.forEach((item) => {
                 
                   setWeather((prev) => ({
@@ -435,12 +431,10 @@ const KakaoMap = () => {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src =
-      `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&libraries=services,clusterer,drawing&autoload=false`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_KEY}&libraries=services,clusterer,drawing&autoload=false`;
     document.head.appendChild(script);
     script.onload = () => {
       if (!mapRef.current) return;
-
       window.kakao.maps.load(() => {
         const options = {
           center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -473,10 +467,8 @@ const KakaoMap = () => {
 
   const sidoClickHandler = async (sido: string, currentPage = 1) => {
     setSido(sido);
-
     setIsGeneralSearch(false);
     setIsOceansBeachSearch(true);
-
     try {
       const response = await axios.get(
         `${BASE_URL}OceansBeachInfoService/getOceansBeachInfo?pageNo=${currentPage}&numOfRows=15&resultType=json&SIDO_NM=${sido}&ServiceKey=${WEATHER_API_KEY}&SG_APIM=2ug8Dm9qNBfD32JLZGPN64f3EoTlkpD8kSOHWfXpyrY`
@@ -484,7 +476,6 @@ const KakaoMap = () => {
       for (let i = 0; i < placeMarkers.length; i++) {
         placeMarkers[i].setMap(null);
       }
-
       const oceansBeachArray: OceansBeachTypes[] = [];
 
       response.data.getOceansBeachInfo.item.map((item: any) => {
@@ -524,6 +515,7 @@ const KakaoMap = () => {
         window.kakao.maps.event.addListener(marker, 'click', () =>
           markerClickHandler(item, marker, 'beach', sido)
         );
+
         let hoverInfowindow = new window.kakao.maps.CustomOverlay({
           content: /* jsx */ `
             <div class="w-fit text-center rounded-lg bg-sky-400 text-white p-4 shadow-sm shadow-white">
@@ -540,16 +532,19 @@ const KakaoMap = () => {
           xAnchor: 0.5,
           yAnchor: 1.5,
         });
+
         window.kakao.maps.event.addListener(marker, 'mouseover', () => {
           hoverInfowindow.setMap(map.current);
         });
+
         window.kakao.maps.event.addListener(marker, 'mouseout', () => {
           hoverInfowindow.setMap(null);
         });
-      });
 
+      });
       map.current.setBounds(bounds);
     } catch (error) {
+
       console.error(error);
     }
   };

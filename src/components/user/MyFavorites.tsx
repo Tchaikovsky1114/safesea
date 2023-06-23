@@ -1,20 +1,7 @@
-import {
-  collection,
-  doc,
-  DocumentData,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-  QuerySnapshot,
-  where,
-} from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { collection,DocumentData,getDocs,query,where } from 'firebase/firestore';
+import  { useEffect, useState } from 'react';
 import { db } from '../../../firebase';
 import { useAppSelector } from '../../store/store';
-import KakaoMap from '../KakaoMap';
 import FavoriteBeachCard from './FavoriteBeachCard';
 
 export interface BeachTypes {

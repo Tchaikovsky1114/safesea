@@ -1,12 +1,8 @@
-import React from 'react';
-
 import Banner from './UI/Banner';
 import KakaoMap from './KakaoMap';
 
 const Home = () => {
-  
-
-  return (
+    return (
     <div className="container mx-auto">
       <Banner />
       <main className="grid grid-cols-2 h-[700px]">

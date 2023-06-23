@@ -1,6 +1,5 @@
-import React from 'react'
 import WeatherDetails from './WeatherDetails'
-import { ResponseDataTypes } from '../KakaoMap'
+import { ResponseDataTypes } from '../../types/interface/weather'
 
 interface Props {
   weatherType:ResponseDataTypes[]

@@ -35,3 +35,9 @@ export interface OceansBeachTypes {
   x: number;
   y: number;
 }
+export interface WeatherDetailsProps {
+  forecastDate:string
+  forecastCategory:string
+  forecastTime:string
+  forecastValue:string;
+}

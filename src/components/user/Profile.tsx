@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useRef, useState } from 'react';
+import  { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   updateUserProfileImageHandler,

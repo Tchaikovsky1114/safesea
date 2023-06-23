@@ -1,13 +1,6 @@
-import React from 'react';
 import useTime from '../../hooks/useTime';
-import { WeatherDetailsTypes } from '../KakaoMap';
+import { WeatherDetailsProps } from '../../types/interface/weather';
 
-interface WeatherDetailsProps {
-  forecastDate:string
-  forecastCategory:string
-  forecastTime:string
-  forecastValue:string;
-}
 
 const WeatherDetails = ({forecastDate,forecastCategory,forecastTime,forecastValue}:WeatherDetailsProps) => {
   const {hours,today, minutes} = useTime()

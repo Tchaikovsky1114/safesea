@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import  { useEffect } from 'react';
+import {  useNavigate } from 'react-router-dom';
 import { signInNaverHandler } from '../../store/slices/UserSlice';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { useAppDispatch } from '../../store/store';
 
 declare global {
   interface Window {
     naver: any;
   }
-}
-
-interface UserInfoTypes {
-  email: string;
-  id: string;
-  name: string;
-  nickname: string;
-  profile_image: string;
 }
 
 const NAVER_CLIENT_ID = '2Cyk7XU1d9tBv1Q8lYKN';

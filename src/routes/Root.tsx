@@ -1,27 +1,19 @@
-import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Auth from '../components/Auth';
 import Beaches from '../components/beaches/Beaches';
 import BeachItem from '../components/beaches/BeachItem';
 import BeachPost from '../components/beaches/BeachPost';
 import BeachReview from '../components/beaches/BeachReview';
 import Home from '../components/Home';
-
 import MyFavorites from '../components/user/MyFavorites';
 import NaverLogin from '../components/login/NaverLogin';
 import Profile from '../components/user/Profile';
-
 import TopNavigation from '../components/UI/TopNavigation';
-
-
-
 interface RootProps {
   modalHandler : () => void
 }
 
 const Root = ({modalHandler}:RootProps) => {
-  
-  
   return (
     <>
     <TopNavigation modalHandler={modalHandler} />
