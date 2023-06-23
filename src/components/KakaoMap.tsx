@@ -16,6 +16,7 @@ import MapAddOns from './kakaomap/MapAddOns';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL, BEACH_URL, KAKAO_MAP_KEY, WEATHER_API_KEY } from '../constants/api';
 import { MiniWeatherDetailsTypes, OceansBeachTypes, ResponseDataTypes, WeatherDetailsTypes } from '../types/interface/weather';
+import LargeBoldText from './common/text/LargeBoldText';
 const { kakao } = window;
 
 const KakaoMap = () => {
@@ -548,9 +549,7 @@ const KakaoMap = () => {
 
   return (
     <>
-      <h2 className="font-bold  py-2 rounded-tl-lg rounded-tr-lg  border-b shadow-lg shadow-gray-400">
-        지역별 해수욕장 찾기
-      </h2>
+      <LargeBoldText text='지역별 해수욕장 찾기' addStyle='py-2 rounded-tl-lg rounded-tr-lg border-b shadow-lg shadow-gray-400'/> 
       <ul className="w-full container flex flex-wrap justify-center md:flex-nowrap flex-row md:justify-between md:items-center gap-2 py-2 md:border mx-auto p-4a md:rounded-bl-lg md:rounded-br-lg bg-opacity-60 shadow-lg shadow-gray-400">
         <RegionNavigation sidoClickHandler={sidoClickHandler} />
       </ul>
@@ -559,9 +558,7 @@ const KakaoMap = () => {
         {isLoading && <InfowindowSkeleton />}
 
         <div className="relative h-[600px] mx-auto z-0">
-          <div className="">
             <div ref={mapRef} className="h-[580px] mx-auto mt-60 xs:mt-0"></div>
-            {/* position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px; */}
             <div
               id="menu_wrap"
               className=" -top-60 xs:top-0 w-full xs:w-[240px] h-[200px] xs:h-[90%] xs:bg-opacity-60 bg-white absolute inset-0 mt-[10px] mb-[30px] xs:ml-[10px] p-[5px] overflow-y-auto z-10 text-[12px] border rounded-lg"
@@ -572,6 +569,7 @@ const KakaoMap = () => {
                   keywordValue={keywordValue}
                   keywordChangeHandler={keywordChangeHandler}
                 />
+                
 
                 {/* placesList - 검색결과 목록 */}
                 {isGeneralSearch && (
@@ -585,6 +583,7 @@ const KakaoMap = () => {
                         />
                       ))}
                     </ul>
+
                     <div id="pagination">
                       {!isOceansBeachSearch &&
                         Array(paginationRef.current?.last)
@@ -601,8 +600,9 @@ const KakaoMap = () => {
                   </>
                 )}
 
-                {isOceansBeachSearch && (
-                  <ul id="placesList">
+                {
+                isOceansBeachSearch
+                  ? <ul id="placesList">
                     {places.map((place: any, index: number) => (
                       <BeachItem
                         key={Math.random() + index}
@@ -612,34 +612,25 @@ const KakaoMap = () => {
                         map={map}
                       />
                     ))}
-                  </ul>
-                )}
-
-                <div
-                  id="pagination"
-                  className="flex justify-center gap-4 text-xs font-bold border border-t-black pt-2"
-                >
-                  {isOceansBeachSearch &&
-                    Array(Math.ceil(oceansBeachTotalCount / 15))
-                      .fill(0)
-                      .map((_, index) => (
-                        <BeachPagination
-                          key={sido + index}
-                          sido={sido}
-                          index={index}
-                          sidoClickHandler={sidoClickHandler}
-                        />
-                      ))}
-                </div>
+                    </ul>
+                  : <div id="pagination" className="flex justify-center gap-4 text-xs font-bold border border-t-black pt-2">
+                      {
+                        Array(Math.ceil(oceansBeachTotalCount / 15))
+                          .fill(0)
+                          .map((_, index) => (
+                            <BeachPagination
+                              key={sido + index}
+                              sido={sido}
+                              index={index}
+                              sidoClickHandler={sidoClickHandler}
+                            />
+                          ))}
+                  </div>
+                  }
               </div>
-            </div>
           </div>
         </div>
-
-        <div className="mt-2 flex justify-center items-center">
-          <MapAddOns map={map} />
-        </div>
-        <div>
+        <MapAddOns map={map} />
           {geoSearchValue && !isOceansBeachSearch && (
             <Weather
               minMaxTemp={minMaxTemp}
@@ -647,7 +638,6 @@ const KakaoMap = () => {
               weather={weather}
             />
           )}
-        </div>
       </div>
     </>
   );

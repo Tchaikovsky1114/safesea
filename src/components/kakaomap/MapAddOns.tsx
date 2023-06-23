@@ -6,7 +6,7 @@ interface MapAddOnsProps {
 
 const MapAddOns = ({ map }: MapAddOnsProps) => {
   return (
-    <>
+    <div className='mt-2 flex justify-center items-center'>
       <button
         className="text-xs font-bold py-2 px-4 border border-slate-600 mr-2 hover:bg-orange-500 hover:text-white transition duration-200 hover:border-orange-500"
         onClick={() => {
@@ -31,7 +31,7 @@ const MapAddOns = ({ map }: MapAddOnsProps) => {
       >
         스카이뷰
       </button>
-    </>
+    </div>
   );
 };
 
