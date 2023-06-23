@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 interface Props {
   imageStyle?:string;
@@ -19,4 +19,4 @@ function SmallImageCard({imageStyle = 'mx-auto pb-2',src,alt,width = 24,height =
   )
 }
 
-export default SmallImageCard
+export default memo(SmallImageCard);

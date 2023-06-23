@@ -3,7 +3,7 @@ import { WeatherDetailsProps } from '../../types/interface/weather';
 import EmphasisSmallText from '../common/text/EmphasisSmallText';
 import SmallImageCard from '../common/card/SmallImageCard';
 import CategoryWrapper from './CategoryWrapper';
-import SmallStatusLineText from '../common/text/SmallStatusLineText';
+import SmallBoldText from '../common/text/SmallBoldText';
 
 const WeatherDetails = ({forecastDate,forecastCategory,forecastTime,forecastValue}:WeatherDetailsProps) => {
   const {hours,today, minutes} = useTime()  
@@ -15,8 +15,8 @@ const WeatherDetails = ({forecastDate,forecastCategory,forecastTime,forecastValu
       <CategoryWrapper wrapperStyle='justify-start'>
         {
         forecastTime === "0000" && forecastDate.substr(4,1) === '0'
-        ? <SmallStatusLineText>{forecastDate.substr(5,1)}월 {forecastDate.substr(6,1) === '0' ? forecastDate.substr(7) : forecastDate.substr(6) }일</SmallStatusLineText>
-        : <SmallStatusLineText>{forecastDate.substr(4,2)}월 {forecastDate.substr(6,1) === '0' ? forecastDate.substr(7) : forecastDate.substr(6) }일</SmallStatusLineText>
+        ? <SmallBoldText>{forecastDate.substr(5,1)}월 {forecastDate.substr(6,1) === '0' ? forecastDate.substr(7) : forecastDate.substr(6) }일</SmallBoldText>
+        : <SmallBoldText>{forecastDate.substr(4,2)}월 {forecastDate.substr(6,1) === '0' ? forecastDate.substr(7) : forecastDate.substr(6) }일</SmallBoldText>
         }
        <EmphasisSmallText currentForecast={currentForecast} forecastDate={forecastDate} today={today}>{forecastTime.substr(0,2)}:00</EmphasisSmallText>
          <EmphasisSmallText currentForecast={currentForecast} forecastDate={forecastDate} today={today}>{forecastValue}°C</EmphasisSmallText>

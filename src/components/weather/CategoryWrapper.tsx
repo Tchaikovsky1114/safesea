@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 interface Props {
   children: React.ReactNode;
@@ -11,4 +11,4 @@ function CategoryWrapper({children,wrapperStyle = 'justify-center'}:Props) {
   )
 }
 
-export default CategoryWrapper
+export default memo(CategoryWrapper);
