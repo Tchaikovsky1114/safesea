@@ -7,8 +7,11 @@ interface WeatherProps {
   geoSearchValue:string
   weather: WeatherDetailsTypes
 }
+
+
+
 const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
-  
+  console.log(weather);  
   
   return (
     <div className='mt-24'>
@@ -35,17 +38,16 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
     <div>
 
 
-    <div className="h-full scrollbar scrollbar-thumb-rose-900 scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full hover:scrollbar-thumb-blue-500 transition-colors duration-150">
-      <p className="text-rose-400 text-xs font-bold text-left pb-2"> * 빨간색이 현재 시간의 날씨를 나타내고 있어요!</p>
-      <WeatherItem bgColor='bg-rose-400' weatherType={weather.tmp} text='현재 기온' textSize='text-[18px]' />
-      <WeatherItem weatherType={weather.pcp} bgColor='bg-indigo-400' text='비소식' />
-      <WeatherItem weatherType={weather.pop} bgColor='bg-slate-400' text='강우 확률' />
-      <WeatherItem weatherType={weather.reh} bgColor='bg-blue-400' text='습도' />
-      <WeatherItem weatherType={weather.sky} bgColor='bg-indigo-400' text='하늘' />
-    </div>
-        <div className="p-2"></div>
-    </div>
-    </div>
+          <div className="h-full scrollbar scrollbar-thumb-rose-900 scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full hover:scrollbar-thumb-blue-500 transition-colors duration-150">
+            <p className="text-rose-400 text-xs font-bold text-left pb-2"> * 빨간색이 현재 시간의 날씨를 나타내고 있어요!</p>
+            <WeatherItem bgColor='bg-rose-400' weatherType={weather.tmp} text='현재 기온' textSize='text-[18px]' />
+            <WeatherItem weatherType={weather.pcp} bgColor='bg-indigo-400' text='비소식' />
+            <WeatherItem weatherType={weather.pop} bgColor='bg-slate-400' text='강우 확률' />
+            <WeatherItem weatherType={weather.reh} bgColor='bg-blue-400' text='습도' />
+            <WeatherItem weatherType={weather.sky} bgColor='bg-indigo-400' text='하늘' />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

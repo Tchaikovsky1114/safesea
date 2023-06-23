@@ -83,15 +83,17 @@ const KakaoMap = () => {
             .then((response) => {
               const result: ResponseDataTypes[] = response.data.response.body.items.item;
               console.log(result);
+              const sortResult = result.reduce((acc:WeatherDetailsTypes, cur) => {
+                if(cur.category === 'POP') acc.pop.push(cur);
+                if(cur.category === 'REH') acc.reh.push(cur);
+                if(cur.category === 'SKY') acc.sky.push(cur);
+                if(cur.category === 'PCP') acc.pcp.push(cur);
+                if(cur.category === 'TMP') acc.tmp.push(cur);
+                return acc;
+              },{pop:[], reh:[], sky:[], pcp:[], tmp:[]})
               result.forEach((item) => {
-                
-                  setWeather((prev) => ({
-                    pop: [...prev.pop, item],
-                    pcp: [...prev.pcp, item],
-                    sky: [...prev.sky, item],
-                    reh: [...prev.reh, item],
-                    tmp: [...prev.tmp, item],
-                  }));
+
+                  setWeather(() => (sortResult));
                 if (item.category === 'TMN' || item.category === 'TMX') {
                   setMinMaxTemp((prev) => [...prev, item]);
                 }

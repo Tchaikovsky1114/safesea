@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 interface Props {
   children: React.ReactNode
@@ -12,4 +12,4 @@ function UserModalItem({children}:Props) {
   )
 }
 
-export default UserModalItem
+export default memo(UserModalItem);

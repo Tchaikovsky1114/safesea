@@ -41,3 +41,4 @@ export interface WeatherDetailsProps {
   forecastTime:string
   forecastValue:string;
 }
+
