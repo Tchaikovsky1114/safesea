@@ -318,10 +318,7 @@ const KakaoMap = () => {
             <div class="flex justify-center items-center w-10 h-8"><img src="https://e7.pngegg.com/pngimages/473/569/png-clipart-graphy-clock-clock-icon-angle-number-thumbnail.png" alt="thermometer" class="w-4 mx-auto" /></div>
           ${tmp
             .map((item: ResponseDataTypes) => {
-              return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstTime.substr(
-                0,
-                2
-              )}</span>시</div>`;
+              return `<div class=" max-w-[40px] min-h-[32px] px-2 text-xs flex items-center justify-start"><span class="font-bold">${item.fcstTime.substr(0,2)}</span>시</div>`;
             })
             .join('')}
           </div>
@@ -345,25 +342,19 @@ const KakaoMap = () => {
             })
             .join('')}
           </div>
+        </div>
+      <div id="tab2" class="overlay-content" >  
+        <div class="grid grid-flow-col grid-cols-3 mt-2">
+          <div class="col-span-2 w-full relative">
+          ${filteredOceansWaterQuality?.res_yn === '적합' ? "<img class='w-28 h-24' src='/approved.png' />" : '부적합!'}
           </div>
-      <div id="tab2" class="overlay-content" >
-      
-      <div class="grid grid-flow-col grid-cols-3 mt-2">
-      <div class="col-span-2 w-full relative"> ${filteredOceansWaterQuality?.res_yn === '적합' ? "<img class='w-28 h-24' src='/approved.png' />" : '여행금지!'}
-      </div>
-      <div class="col-span-1 flex flex-col justify-center items-start mx-auto mt-4">
-        <div>
-        <span class="text-xs font-bold">대장균: ${filteredOceansWaterQuality?.res1}</span>
-        </div>
-        <div>
-        <span class="text-xs font-bold">장구균: ${filteredOceansWaterQuality?.res2}</span>
-        </div>
-        <div>
-        <span class="text-xs font-bold">적합여부: ${filteredOceansWaterQuality?.res_yn}</span>
+          <div class="col-span-1 flex flex-col justify-center items-start mx-auto mt-4">
+            <span class="text-xs font-bold">대장균: ${filteredOceansWaterQuality?.res1}</span>
+            <span class="text-xs font-bold">장구균: ${filteredOceansWaterQuality?.res2}</span>
+            <span class="text-xs font-bold">적합여부: ${filteredOceansWaterQuality?.res_yn}</span>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
       
       <div id="tab3" class="overlay-content" >
 
@@ -569,8 +560,6 @@ const KakaoMap = () => {
                   keywordValue={keywordValue}
                   keywordChangeHandler={keywordChangeHandler}
                 />
-                
-
                 {/* placesList - 검색결과 목록 */}
                 {isGeneralSearch && (
                   <>
