@@ -20,6 +20,7 @@ let max = Math.floor(20);
 const nb = Math.ceil(Math.random() * (max - min));
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
+
 const BeachItem = () => {
   const { beachId } = useParams();
 
@@ -81,7 +82,7 @@ const BeachItem = () => {
     fetchData();
     fetchRating();
   }, []);
-
+  
   useEffect(() => {
     if (!beachId) return;
     const unsubscribe = onSnapshot(

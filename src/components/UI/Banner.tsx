@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const contentText = '떠나고 싶다면?      \n 오늘의 안전한 여행         \n The Safe '
+const contentText = '바다가 보고싶을 때,      \n 오늘의 안전한 해변         \n The Safety Sea '
 
 const Banner = () => {
   const textRef = useRef<any>(null);
