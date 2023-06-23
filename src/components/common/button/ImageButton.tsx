@@ -14,12 +14,9 @@ function ImageButton({onClick, addStyle, src, imageStyle='w-6 h-6', text}: Props
         className={`p-4 px-6 font-bold text-sm flex items-center justify-center gap-4 border ${addStyle}`}
         onClick={onClick}
       >
-          <img
-            src={src}
-            className={imageStyle}
-          />{' '}
-          {text}
-        </button>
+        <img src={src} className={imageStyle} />
+        {text}
+      </button>
   )
 }
 

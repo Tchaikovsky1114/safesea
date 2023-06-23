@@ -18,7 +18,7 @@ const WeatherDetails = ({forecastDate,forecastCategory,forecastTime,forecastValu
         ? <SmallBoldText>{forecastDate.substr(5,1)}월 {forecastDate.substr(6,1) === '0' ? forecastDate.substr(7) : forecastDate.substr(6) }일</SmallBoldText>
         : <SmallBoldText>{forecastDate.substr(4,2)}월 {forecastDate.substr(6,1) === '0' ? forecastDate.substr(7) : forecastDate.substr(6) }일</SmallBoldText>
         }
-       <EmphasisSmallText currentForecast={currentForecast} forecastDate={forecastDate} today={today}>{forecastTime.substr(0,2)}:00</EmphasisSmallText>
+       <EmphasisSmallText addStyle='font-bold' currentForecast={currentForecast} forecastDate={forecastDate} today={today}>{forecastTime.substr(0,2)}:00</EmphasisSmallText>
          <EmphasisSmallText currentForecast={currentForecast} forecastDate={forecastDate} today={today}>{forecastValue}°C</EmphasisSmallText>
       </CategoryWrapper>
     );
