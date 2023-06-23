@@ -11,10 +11,9 @@ interface WeatherProps {
 
 
 const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
-  console.log(weather);  
   
   return (
-    <div className='mt-24'>
+    <div className='mt-24 mb-20'>
     <h2 className='font-bold text-lg text-center'>오늘의 {geoSearchValue} 날씨는?</h2>  
     <div className="relative">
     <div className='mx-auto flex flex-wrap sm:flex-nowrap flex-row justify-start items-center gap-2 border border-gray-300 shadow-xl rounded-full sm:rounded-3xl px-4 py-8 my-8 bg-slate-300 relative '>
@@ -44,7 +43,7 @@ const Weather = ({minMaxTemp,geoSearchValue,weather}:WeatherProps) => {
             <WeatherItem weatherType={weather.pcp} bgColor='bg-indigo-400' text='비소식' />
             <WeatherItem weatherType={weather.pop} bgColor='bg-slate-400' text='강우 확률' />
             <WeatherItem weatherType={weather.reh} bgColor='bg-blue-400' text='습도' />
-            <WeatherItem weatherType={weather.sky} bgColor='bg-indigo-400' text='하늘' />
+            <WeatherItem weatherType={weather.sky} bgColor='bg-indigo-400' text='구름' />
           </div>
         </div>
       </div>

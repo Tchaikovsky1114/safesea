@@ -13,6 +13,8 @@ export interface WeatherDetailsTypes {
   pcp: ResponseDataTypes[];
   tmp: ResponseDataTypes[];
   sky: ResponseDataTypes[];
+  tmn?: ResponseDataTypes[];
+  tmx?: ResponseDataTypes[];
 }
 
 export interface MiniWeatherDetailsTypes {
@@ -42,3 +44,7 @@ export interface WeatherDetailsProps {
   forecastValue:string;
 }
 
+export interface CelciusTypes {
+  tmn?: ResponseDataTypes[];
+  tmx?: ResponseDataTypes[];
+}
